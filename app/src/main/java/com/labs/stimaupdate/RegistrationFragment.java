@@ -82,24 +82,30 @@ public class RegistrationFragment extends Fragment {
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.body().getResponse().equals("ok")) {
                     MainActivity.prefConfig.displayToast("Registration Successful");
+                    fname.setText("");
+                    lname.setText("");
+                    email.setText("");
+                    phonenumber.setText("");
+                    password.setText("");
                 } else if (response.body().getResponse().equals("exists")) {
                     MainActivity.prefConfig.displayToast("User already exits...");
                 } else if (response.body().getResponse().equals("error")) {
                     MainActivity.prefConfig.displayToast("Something went wrong.Try again later");
+                    fname.setText("");
+                    lname.setText("");
+                    email.setText("");
+                    phonenumber.setText("");
+                    password.setText("");
                 }
 
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                MainActivity.prefConfig.displayToast(t.getMessage().toString());
+                MainActivity.prefConfig.displayToast(t.getMessage());
             }
         });
-        fname.setText("");
-        lname.setText("");
-        email.setText("");
-        phonenumber.setText("");
-        password.setText("");
+
     }
 
 
@@ -151,7 +157,7 @@ public class RegistrationFragment extends Fragment {
     }
 
     public  interface RegisterFormListener{
-        public void BackToLogin();
+        void BackToLogin();
     }
 
 }

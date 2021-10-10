@@ -20,4 +20,6 @@
     <string name="registerbtn">Register</string>
     <string name="back">Back</string>
     <string name="phone_number">Phone Number</string>
+    <string name="label">Account Number</string>
+    <string name="account_number">Account Number</string>
 </resources>

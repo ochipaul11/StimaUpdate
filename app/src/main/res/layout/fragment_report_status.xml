@@ -1,14 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ReportStatus">
+    android:orientation="vertical"
+    tools:context=".ReportStatusFrag">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_report_outage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:navigationIcon="?attr/homeAsUpIndicator" />
 
-</FrameLayout>
+    <com.transferwise.sequencelayout.SequenceLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.transferwise.sequencelayout.SequenceStep
+            android:id="@+id/step1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:anchor="30 Nov"
+            app:title="Outage Reported"/>
+        <com.transferwise.sequencelayout.SequenceStep
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="Report Received"/>
+        <com.transferwise.sequencelayout.SequenceStep
+            android:id="@+id/step3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:active="true"
+            app:anchor="Today"
+            app:subtitle="Subtitle of this step."
+            app:title="Technician On Site"
+            app:titleTextAppearance="@style/TextAppearance.AppCompat.Title"/>
+        <com.transferwise.sequencelayout.SequenceStep
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="Fourth step"/>
+        <com.transferwise.sequencelayout.SequenceStep
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:anchor="2 Dec"
+            app:title="Restored"/>
+    </com.transferwise.sequencelayout.SequenceLayout>
+
+</LinearLayout>

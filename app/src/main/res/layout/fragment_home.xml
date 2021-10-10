@@ -3,4 +3,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeFragment"/>
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".HomeFragment">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="Home Fragment" />
+
+    <com.transferwise.sequencelayout.SequenceLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.transferwise.sequencelayout.SequenceStep
+            android:id="@+id/firstStep"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:anchor="30 Nov"
+            app:title="First step"/>
+        <com.transferwise.sequencelayout.SequenceStep
+            android:id="@+id/firsttwo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="Second step"/>
+        <com.transferwise.sequencelayout.SequenceStep
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:active="false"
+            app:anchor="Today"
+            app:subtitle="Subtitle of this step."
+            app:title="Third step"
+            app:titleTextAppearance="@style/TextAppearance.AppCompat.Title"/>
+        <com.transferwise.sequencelayout.SequenceStep
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="Fourth step"/>
+        <com.transferwise.sequencelayout.SequenceStep
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:active="true"
+
+            app:title="Fifth step"/>
+    </com.transferwise.sequencelayout.SequenceLayout>
+</FrameLayout>
