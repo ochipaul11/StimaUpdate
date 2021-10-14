@@ -71,20 +71,21 @@ public class LoginFragment extends Fragment {
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.body().getResponse().equals("ok")) {
                     MainActivity.prefConfig.writeLoginStatus(true);
-                    onLoginFormActivityListener.performLogin(response.body().getFname(),
+                    onLoginFormActivityListener.performLogin(
+                            response.body().getFname(),
                             response.body().getLname(),
+
                             response.body().getEmail(),
                             response.body().getPhonenumber());
-                }
-                else if(response.body().getResponse().equals("failed")){
+                } else if (response.body().getResponse().equals("failed")) {
                     MainActivity.prefConfig.displayToast("Wrong Email or Password");
                 }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Log.d("MainActivity",t.getMessage().toString() );
-                MainActivity.prefConfig.displayToast(t.getMessage().toString());
+                Log.d("MainActivity", t.getMessage());
+                MainActivity.prefConfig.displayToast(t.getMessage());
             }
         });
     }
@@ -129,8 +130,8 @@ public class LoginFragment extends Fragment {
     }
 
     public interface OnLoginFormActivityListener {
-        public void performRegister();
+        void performRegister();
 
-        public void performLogin(String firstName, String lastName, String email, int phoneNumber);
+        void performLogin(String firstName, String lastName, String email, int phoneNumber);
     }
 }

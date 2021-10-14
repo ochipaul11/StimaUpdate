@@ -43,6 +43,15 @@
                 android:maxLines="1" />
 
             <EditText
+                android:id="@+id/etMeterAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:hint="@string/meter_account"
+                android:inputType="number"
+                android:maxLines="1" />
+
+            <EditText
                 android:id="@+id/etEmailRegister"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

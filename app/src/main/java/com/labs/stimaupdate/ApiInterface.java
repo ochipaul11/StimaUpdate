@@ -15,4 +15,7 @@ public interface ApiInterface {
     @GET("login.php")
     Call<User> performUserLogin(@Query("email") String email,
                                 @Query("password") String password);
+
+    @GET("checkmeteraccount.php")
+    Call<Account> checkMeterExists(@Query("account_number") int meteraccount);
 }

@@ -53,6 +53,12 @@ public class PrefConfig {
         editor.commit();
     }
 
+    public void writeMeterAccount(int meteraccount){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("com.labs.preference_meter_account",meteraccount);
+        editor.commit();
+    }
+
     public void writeEmail(String email) {
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -71,6 +77,10 @@ public class PrefConfig {
 
     public String readLastName() {
         return sharedPreferences.getString(context.getString(R.string.pref_last_name), "lastName");
+    }
+
+    public int meterAccount(){
+        return  sharedPreferences.getInt("com.labs.preference_meter_account",1);
     }
 
     public String readEmail() {
