@@ -16,7 +16,7 @@ import com.transferwise.sequencelayout.SequenceStep;
 public class HomeFragment extends Fragment {
 
     HomeFragmentListener homeFragmentListener;
-    Button btnLogout;
+    Button btnReportOutage, btnLogOut;
     SequenceStep step1,step2,step3,step4,step5;
 
     public HomeFragment() {
@@ -35,20 +35,29 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-      /*  btnLogout = view.findViewById(R.id.btnlogout);
-        btnLogout.setOnClickListener(new View.OnClickListener() {
+       btnReportOutage = view.findViewById(R.id.btnReportOutage);
+        btnReportOutage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               homeFragmentListener.openReportOutageFrag();
+            }
+        });
+        btnLogOut = view.findViewById(R.id.btnLogOut);
+        btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 homeFragmentListener.LogoutListener();
+
             }
         });
-*/
+
 
         return view;
     }
 
     public interface HomeFragmentListener {
         void LogoutListener();
+        void openReportOutageFrag();
 
         void BackFromHomeFragment();
     }

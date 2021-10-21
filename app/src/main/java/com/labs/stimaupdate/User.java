@@ -12,9 +12,6 @@ public class User {
     @SerializedName("lname")
     private String lname;
 
-    @SerializedName("meteraccount")
-    private int meter_account;
-
     @SerializedName("email")
     private String email;
 
@@ -32,8 +29,6 @@ public class User {
     public String getLname() {
         return lname;
     }
-
-    public int getMeter_account() {return meter_account;  }
 
     public String getEmail() {
         return email;

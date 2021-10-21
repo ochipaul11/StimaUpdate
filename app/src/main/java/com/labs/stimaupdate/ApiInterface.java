@@ -17,5 +17,13 @@ public interface ApiInterface {
                                 @Query("password") String password);
 
     @GET("checkmeteraccount.php")
-    Call<Account> checkMeterExists(@Query("account_number") int meteraccount);
+    Call<Account> checkMeterExists(@Query("accountnumber") int meteraccount);
+
+    @GET("reportanoutage.php")
+    Call<Report> reportAnOutage(@Query("accountnumber") int meteraccount,
+                                @Query("email") String email,
+                                @Query("scope") String scope,
+                                @Query("nature") String nature,
+                                @Query("longitude") double longitude,
+                                @Query("latitude") double latitude);
 }

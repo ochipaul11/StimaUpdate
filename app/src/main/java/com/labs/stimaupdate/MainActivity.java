@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity implements
 
         if (findViewById(R.id.fragment_container) != null) {
             if (savedInstanceState != null) {
-                return;
             } else if (prefConfig.readingLoginStatus()) {
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -71,15 +70,23 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void LogoutListener() {
-      prefConfig.writeLoginStatus(false);
-      prefConfig.writeFirstName("user");
-      prefConfig.writeLastName("user");
-      prefConfig.writeEmail("email");
+        prefConfig.writeLoginStatus(false);
+        prefConfig.writeFirstName("user");
+        prefConfig.writeLastName("user");
+        prefConfig.writeEmail("email");
 
-      getSupportFragmentManager()
-              .beginTransaction()
-              .replace(R.id.fragment_container,new LoginFragment())
-              .commit();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new LoginFragment())
+                .commit();
+    }
+
+    @Override
+    public void openReportOutageFrag() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new ReportOutageFrag())
+                .commit();
     }
 
     @Override

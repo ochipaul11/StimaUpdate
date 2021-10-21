@@ -1,6 +1,15 @@
 package com.labs.stimaupdate;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +17,8 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -19,35 +30,36 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ReportOutageFrag extends Fragment {
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    TextInputLayout tilScope;
-    AutoCompleteTextView dpScopes, dpComplaintNature;
-    ArrayList<String> arrayList_scope;
-    ArrayList<String> arrayList_complaintNature;
-    ArrayAdapter<String> arrayAdapter_scope;
-    ArrayAdapter<String> arrayAdapter_complaintNature;
-    TextInputEditText etAccountNumber;
-    Button btnReportComplaint;
+public class ReportOutageFrag extends Fragment implements LocationListener {
+
+    LocationManager locationManager;
+    double longitude, latitude = 0.00;
+    String email, scope, nature;
+    private TextInputLayout tilScope;
+    private AutoCompleteTextView dpScopes, dpComplaintNature;
+    private ArrayList<String> arrayList_scope;
+    private ArrayList<String> arrayList_complaintNature;
+    private ArrayAdapter<String> arrayAdapter_scope;
+    private ArrayAdapter<String> arrayAdapter_complaintNature;
+    private TextInputEditText etAccountNumber;
+    private Button btnReportComplaint;
 
     public ReportOutageFrag() {
         // Required empty public constructor
     }
 
-    public static ReportOutageFrag newInstance(String param1, String param2) {
-        ReportOutageFrag fragment = new ReportOutageFrag();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+//LOCATION SERVICE RUNTIME PEROMISSIONS
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity) getContext(), new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION
+            }, 100);
+        }
+
         View view = inflater.inflate(R.layout.fragment_report_outage, container, false);
 
         etAccountNumber = view.findViewById(R.id.etAccountNumber);
@@ -57,26 +69,14 @@ public class ReportOutageFrag extends Fragment {
         dpScopes = view.findViewById(R.id.dpScopes);
         btnReportComplaint = view.findViewById(R.id.btnReportComplaint);
 
-        final int meterAccount = Integer.parseInt(etAccountNumber.getText().toString());
+
+
         btnReportComplaint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Call<Account> call = MainActivity.apiInterface.checkMeterExists(meterAccount);
-                call.enqueue(new Callback<Account>() {
-                    @Override
-                    public void onResponse(Call<Account> call, Response<Account> response) {
-                        if (response.body().getResponse().equals("ok")) {
+                reportOutage();
 
-                        } else {
-                            etAccountNumber.setError("Meter number does not exist!");
-                        }
-                    }
 
-                    @Override
-                    public void onFailure(Call<Account> call, Throwable t) {
-                        MainActivity.prefConfig.displayToast(t.getMessage());
-                    }
-                });
             }
         });
 
@@ -111,4 +111,74 @@ public class ReportOutageFrag extends Fragment {
 
         return view;
     }
+
+    @SuppressLint("MissingPermission")
+    private void reportOutage() {
+        try {
+            locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, (LocationListener) getContext());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String email, scope, nature;
+
+        email = MainActivity.prefConfig.readEmail();
+        scope = dpScopes.getText().toString();
+        nature = dpComplaintNature.getText().toString();
+        int accountnumber = etAccountNumber.getInputType();
+        Call<Report> call = MainActivity.apiInterface.reportAnOutage(accountnumber, email, scope, nature, longitude,latitude);
+        call.enqueue(new Callback<Report>() {
+            @Override
+            public void onResponse(Call<Report> call, Response<Report> response) {
+                if (response.body().getResponse().equals("ok")) {
+                    //STOP PROGREES POP UP
+                    MainActivity.prefConfig.displayToast("Outage reported Successfully!");
+                }
+                else if(response.body().getResponse().equals("exists")){
+                    MainActivity.prefConfig.displayToast("Account Number Does Not Exist!");
+                }
+                else if(response.body().getResponse().equals("error")){
+                    MainActivity.prefConfig.displayToast("Database Error!");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Report> call, Throwable t) {
+                Log.d("MainActivity", t.getMessage());
+                MainActivity.prefConfig.displayToast(t.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+        try {
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+
+    }
+
+    //public interface onReportOutageActivityListener{
+
+  //  }
 }
