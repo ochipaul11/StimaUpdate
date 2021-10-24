@@ -18,6 +18,14 @@ public class User {
     @SerializedName("phonenumber")
     private int phonenumber;
 
+    public User(String response, String fname, String lname, String email, int phonenumber) {
+        Response = response;
+        this.fname = fname;
+        this.lname = lname;
+        this.email = email;
+        this.phonenumber = phonenumber;
+    }
+
     public String getResponse() {
         return Response;
     }

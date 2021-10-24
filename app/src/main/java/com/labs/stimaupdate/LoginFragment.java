@@ -61,14 +61,17 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
-    public void userLogin() {
+    private void userLogin() {
         final String email = etEmail.getText().toString();
         final String userPassword = etUserPassword.getText().toString();
 
         Call<User> call = MainActivity.apiInterface.performUserLogin(email, userPassword);
         call.enqueue(new Callback<User>() {
+
+
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
+
                 if (response.body().getResponse().equals("ok")) {
                     MainActivity.prefConfig.writeLoginStatus(true);
                     onLoginFormActivityListener.performLogin(
