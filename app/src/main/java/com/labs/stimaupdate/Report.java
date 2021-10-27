@@ -17,6 +17,12 @@ public class Report {
     private double longitude;
     @SerializedName("latitude")
     private double latitude;
+    @SerializedName("address")
+    private String address;
+
+    public String getAddress() {
+        return address;
+    }
 
     public String getResponse() {
         return response;

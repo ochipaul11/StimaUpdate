@@ -16,8 +16,8 @@ import com.transferwise.sequencelayout.SequenceStep;
 public class HomeFragment extends Fragment {
 
     HomeFragmentListener homeFragmentListener;
-    Button btnReportOutage, btnLogOut;
-    SequenceStep step1,step2,step3,step4,step5;
+    Button btnReportOutage, btnLogOut, btnReportsList;
+    SequenceStep step1, step2, step3, step4, step5;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -26,7 +26,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        Activity activity= (Activity) context;
+        Activity activity = (Activity) context;
         homeFragmentListener = (HomeFragmentListener) activity;
     }
 
@@ -35,11 +35,11 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-       btnReportOutage = view.findViewById(R.id.btnReportOutage);
+        btnReportOutage = view.findViewById(R.id.btnReportOutage);
         btnReportOutage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               homeFragmentListener.openReportOutageFrag();
+                homeFragmentListener.openReportOutageFrag();
             }
         });
         btnLogOut = view.findViewById(R.id.btnLogOut);
@@ -51,13 +51,23 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        btnReportsList = view.findViewById(R.id.btnReportsList);
+        btnReportsList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                homeFragmentListener.openOutageReportsFrag();
+            }
+        });
 
         return view;
     }
 
     public interface HomeFragmentListener {
         void LogoutListener();
+
         void openReportOutageFrag();
+
+        void openOutageReportsFrag();
 
         void BackFromHomeFragment();
     }

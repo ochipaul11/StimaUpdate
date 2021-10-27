@@ -34,9 +34,9 @@ public class ReportStatusAdapter extends ArrayAdapter<ReportStatus> {
         tvReportDate = listItemView.findViewById(R.id.tvReportDate);
         tvReportStatus = listItemView.findViewById(R.id.tvStatus);
 
-        tvReportNumber.setText(currentReport.getReportNumber());
-        tvReportDate.setText((CharSequence) currentReport.getReportDate());
-        tvReportStatus.setText(currentReport.getReportStatus());
+       // tvReportNumber.setText(currentReport.getId());
+        tvReportDate.setText(currentReport.getReportReceivedDate());
+        //tvReportStatus.setText(currentReport.);
 
         return listItemView;
     }

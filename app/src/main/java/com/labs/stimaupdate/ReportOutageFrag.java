@@ -1,7 +1,7 @@
 package com.labs.stimaupdate;
 
 import android.app.Activity;
-import android.location.Location;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,21 +10,24 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 
-public class ReportOutageFrag extends Fragment  {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-    private FusedLocationProviderClient client;
+public class ReportOutageFrag extends Fragment {
+
     double longitude, latitude = 0.00;
-    String email, scope, nature;
+    String email, scope, nature,address;
+    int accountNumber;
+    ReportOutageActivityListener reportOutageActivityListener;
     private TextInputLayout tilScope;
     private AutoCompleteTextView dpScopes, dpComplaintNature;
     private ArrayList<String> arrayList_scope;
@@ -34,6 +37,7 @@ public class ReportOutageFrag extends Fragment  {
     private TextInputEditText etAccountNumber;
     private Button btnReportComplaint;
 
+
     public ReportOutageFrag() {
         // Required empty public constructor
     }
@@ -42,29 +46,21 @@ public class ReportOutageFrag extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-//LOCATION SERVICE RUNTIME PEROMISSIONS
- /*       if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions((Activity) getContext(), new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION
-            }, 100);
-        }
-*/
         View view = inflater.inflate(R.layout.fragment_report_outage, container, false);
 
         etAccountNumber = view.findViewById(R.id.etAccountNumber);
-
         tilScope = view.findViewById(R.id.tilScope);
         dpComplaintNature = view.findViewById(R.id.dpComplaintNature);
         dpScopes = view.findViewById(R.id.dpScopes);
         btnReportComplaint = view.findViewById(R.id.btnReportComplaint);
 
-client = LocationServices.getFusedLocationProviderClient(getContext());
-
         btnReportComplaint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-getLongitudeLatitude();
+
+                reportOutageActivityListener.getLatitudeLogitude();
+
+               reportOutage();
 
 
             }
@@ -81,7 +77,7 @@ getLongitudeLatitude();
         arrayList_complaintNature = new ArrayList<>();
         arrayList_complaintNature.add("No Supply");
         arrayList_complaintNature.add("Irregular Supply");
-        arrayList_complaintNature.add("Lines on Groung");
+        arrayList_complaintNature.add("Lines on Ground");
         arrayList_complaintNature.add("Fire");
         arrayList_complaintNature.add("Meter Damaged");
         arrayList_complaintNature.add("Tree Branches on Poweline");
@@ -102,17 +98,48 @@ getLongitudeLatitude();
         return view;
     }
 
-    private void getLongitudeLatitude() {
-        client.getLastLocation().addOnSuccessListener((Activity) getContext(), new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
+    private void reportOutage() {
+        reportOutageActivityListener.getLatitudeLogitude();
+        accountNumber = Integer.parseInt(etAccountNumber.getText().toString());
+        email = MainActivity.prefConfig.readEmail();
+        scope = dpScopes.getText().toString();
+        nature = dpComplaintNature.getText().toString();
+        longitude = MainActivity.longitude;
+        latitude = MainActivity.latitude;
+        address = MainActivity.address;
 
+
+        Call<Report> call = MainActivity.apiInterface.reportAnOutage(accountNumber,email,scope,nature,longitude,latitude,address);
+        call.enqueue(new Callback<Report>() {
+            @Override
+            public void onResponse(Call<Report> call, Response<Report> response) {
+                if(response.body().getResponse().equals("ok")){
+                    MainActivity.prefConfig.displayToast("Outage Reported Successfully!");
+                }
+                else if(response.body().getResponse().equals("account Number does not exist")){
+                    MainActivity.prefConfig.displayToast("Account Number does not exist!");
+                }
+                else if(response.body().getResponse().equals("error from system")){
+                    MainActivity.prefConfig.displayToast(response.body().getResponse());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Report> call, Throwable t) {
+                MainActivity.prefConfig.displayToast(t.getMessage());
             }
         });
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        Activity activity = (Activity) context;
+        reportOutageActivityListener = (ReportOutageActivityListener) activity;
+    }
 
-    //public interface onReportOutageActivityListener{
+    public interface ReportOutageActivityListener {
+        void getLatitudeLogitude();
 
-  //  }
+    }
 }

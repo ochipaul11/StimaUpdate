@@ -1,36 +1,51 @@
 package com.labs.stimaupdate;
 
-import java.util.Date;
+import com.google.gson.annotations.SerializedName;
 
 public class ReportStatus {
+    @SerializedName("id")
     private int reportNumber;
-    private String reportStatus;
-    private Date reportDate;
-    private String outageReceived;
-    private String technicianOnSite;
-    private String restored;
+
+    @SerializedName("address")
+    private String address ;
+
+    @SerializedName("report_received_date")
+    private String reportReceivedDate;
+
+    @SerializedName("technician_on_site")
+    private int technicianOnSite;
+
+    @SerializedName("restored")
+    private int restored;
+
+    public ReportStatus() {
+    }
+
+    public ReportStatus(int reportNumber, String address, String reportReceivedDate, int technicianOnSite, int restored) {
+        this.reportNumber = reportNumber;
+        this.address = address;
+        this.reportReceivedDate = reportReceivedDate;
+        this.technicianOnSite = technicianOnSite;
+        this.restored = restored;
+    }
 
     public int getReportNumber() {
         return reportNumber;
     }
 
-    public String getReportStatus() {
-        return reportStatus;
+    public String getAddress() {
+        return address;
     }
 
-    public Date getReportDate() {
-        return reportDate;
+    public String getReportReceivedDate() {
+        return reportReceivedDate;
     }
 
-    public String getOutageReceived() {
-        return outageReceived;
-    }
-
-    public String getTechnicianOnSite() {
+    public int getTechnicianOnSite() {
         return technicianOnSite;
     }
 
-    public String getRestored() {
+    public int getRestored() {
         return restored;
     }
 }

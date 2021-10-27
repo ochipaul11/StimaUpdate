@@ -46,7 +46,7 @@ public class RegistrationFragment extends Fragment {
         btnBackRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                registerFormListener.BackToLogin();
+                registerFormListener.BackToLoginFromRegistrationFrag();
             }
         });
 
@@ -157,7 +157,7 @@ public class RegistrationFragment extends Fragment {
     }
 
     public  interface RegisterFormListener{
-        void BackToLogin();
+        void BackToLoginFromRegistrationFrag();
     }
 
 }

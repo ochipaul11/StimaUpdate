@@ -80,6 +80,7 @@ public class LoginFragment extends Fragment {
 
                             response.body().getEmail(),
                             response.body().getPhonenumber());
+                    MainActivity.prefConfig.displayToast(String.valueOf(response.code()));
                 } else if (response.body().getResponse().equals("failed")) {
                     MainActivity.prefConfig.displayToast("Wrong Email or Password");
                 }
