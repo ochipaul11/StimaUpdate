@@ -25,7 +25,7 @@ import retrofit2.Response;
 public class ReportOutageFrag extends Fragment {
 
     double longitude, latitude = 0.00;
-    String email, scope, nature,address;
+    String email, scope, nature, address;
     int accountNumber;
     ReportOutageActivityListener reportOutageActivityListener;
     private TextInputLayout tilScope;
@@ -60,7 +60,7 @@ public class ReportOutageFrag extends Fragment {
 
                 reportOutageActivityListener.getLatitudeLogitude();
 
-               reportOutage();
+                reportOutage();
 
 
             }
@@ -109,18 +109,18 @@ public class ReportOutageFrag extends Fragment {
         address = MainActivity.address;
 
 
-        Call<Report> call = MainActivity.apiInterface.reportAnOutage(accountNumber,email,scope,nature,longitude,latitude,address);
+        Call<Report> call = MainActivity.apiInterface.reportAnOutage(accountNumber, email, scope, nature, longitude, latitude, address);
         call.enqueue(new Callback<Report>() {
             @Override
             public void onResponse(Call<Report> call, Response<Report> response) {
-                if(response.body().getResponse().equals("ok")){
+                if (response.body().getResponse().equals("ok")) {
                     MainActivity.prefConfig.displayToast("Outage Reported Successfully!");
-                }
-                else if(response.body().getResponse().equals("account Number does not exist")){
+                } else if (response.body().getResponse().equals("account Number does not exist")) {
                     MainActivity.prefConfig.displayToast("Account Number does not exist!");
-                }
-                else if(response.body().getResponse().equals("error from system")){
-                    MainActivity.prefConfig.displayToast(response.body().getResponse());
+                } else if (response.body().getResponse().equals("error from system")) {
+                    MainActivity.prefConfig.displayToast("Error from the system!");
+                } else {
+                    MainActivity.prefConfig.displayToast("Did not collect location data!");
                 }
             }
 

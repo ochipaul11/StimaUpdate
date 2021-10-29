@@ -13,17 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class OutageReportsFrag extends Fragment {
     ListView lvReportsList;
@@ -81,42 +75,22 @@ public class OutageReportsFrag extends Fragment {
     }
 
     private void outageReportsList() {
-        String URL = "http://stimaupdate.site/getoutagereports.php";
-        MainActivity.reportStatuses = new ArrayList<>();
+        String email = MainActivity.prefConfig.readEmail();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL, new Response.Listener<String>() {
+        Call<List<ReportStatus>> call = MainActivity.apiInterface.getOutageReports(email);
+        call.enqueue(new Callback<List<ReportStatus>>() {
             @Override
-            public void onResponse(String response) {
-                if (response != null) {
-                    try {
-                        JSONArray jsonArray = new JSONArray(response);
-
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject data = jsonArray.getJSONObject(i);
-                            MainActivity.reportStatuses.add(new ReportStatus(
-                                    data.getInt("id"),
-                                    data.getString("address"),
-                                    data.getString("report_received_date"),
-                                    data.getInt("technician_on_site"),
-                                    data.getInt("restored")));
-
-                        }
-                        MainActivity.reportStatusAdapter = new ReportStatusAdapter(getActivity(), MainActivity.reportStatuses);
-                        lvReportsList.setAdapter(MainActivity.reportStatusAdapter);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
+            public void onResponse(Call<List<ReportStatus>> call, Response<List<ReportStatus>> response) {
+                MainActivity.reportStatuses = response.body();
+                MainActivity.reportStatusAdapter = new ReportStatusAdapter(getContext(),MainActivity.reportStatuses);
+                lvReportsList.setAdapter(MainActivity.reportStatusAdapter);
             }
-        }, new Response.ErrorListener() {
+
             @Override
-            public void onErrorResponse(VolleyError error) {
-                MainActivity.prefConfig.displayToast(error.getMessage());
+            public void onFailure(Call<List<ReportStatus>> call, Throwable t) {
+
             }
         });
-        Volley.newRequestQueue(getActivity()).add(stringRequest);
     }
 
     public interface OutageReportsListener {

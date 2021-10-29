@@ -21,7 +21,7 @@ public interface ApiInterface {
                                 @Query("password") String password);
 
     @GET("getoutagereports.php")
-    Call<List<ReportStatus>> getOutageReports();
+    Call<List<ReportStatus>> getOutageReports(@Query("email") String email);
 
     @GET("reportanoutage.php")
     Call<Report> reportAnOutage(@Query("accountnumber") int meteraccount,
