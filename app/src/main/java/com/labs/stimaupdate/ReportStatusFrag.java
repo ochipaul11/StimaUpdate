@@ -20,6 +20,7 @@ public class ReportStatusFrag extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_report_status, container, false);
+
         return view;
     }
 }

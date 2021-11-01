@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements
             } else if (prefConfig.readingLoginStatus()) {
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .add(R.id.fragment_container, new HomeFragment())
+                        .add(R.id.fragment_container, new DashboardFrag())
                         .commit();
             } else {
                 getSupportFragmentManager()
