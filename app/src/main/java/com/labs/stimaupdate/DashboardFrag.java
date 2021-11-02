@@ -1,25 +1,22 @@
 package com.labs.stimaupdate;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link DashboardFrag#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class DashboardFrag extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
+    DashboardFragmentListener dashboardFragmentListener;
+    CardView cvMyZone, cvReportOutage, cvReportStatus, cvPlannedOutage, cvLogout, cvAbout;
     private String mParam1;
     private String mParam2;
 
@@ -27,15 +24,6 @@ public class DashboardFrag extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DashboardFrag.
-     */
-    // TODO: Rename and change types and number of parameters
     public static DashboardFrag newInstance(String param1, String param2) {
         DashboardFrag fragment = new DashboardFrag();
         Bundle args = new Bundle();
@@ -43,6 +31,13 @@ public class DashboardFrag extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        Activity activity = (Activity) context;
+        dashboardFragmentListener = (DashboardFragmentListener) activity;
     }
 
     @Override
@@ -57,7 +52,45 @@ public class DashboardFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dashboard2, container, false);
+        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+
+        cvMyZone = view.findViewById(R.id.cvMyZone);
+        cvReportOutage = view.findViewById(R.id.cvReportOutage);
+        cvReportStatus = view.findViewById(R.id.cvReportStatus);
+        cvPlannedOutage = view.findViewById(R.id.cvPlannedOutage);
+        cvLogout = view.findViewById(R.id.cvLogOut);
+        cvAbout = view.findViewById(R.id.cvAbout);
+
+        cvReportOutage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dashboardFragmentListener.openReportOutageFrag();
+            }
+        });
+        cvReportStatus.findFocus();
+        cvReportStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dashboardFragmentListener.openOutageReportsFrag();
+            }
+        });
+        cvLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dashboardFragmentListener.LogoutListener();
+            }
+        });
+
+        return view;
+    }
+
+    public interface DashboardFragmentListener {
+        void LogoutListener();
+
+        void openReportOutageFrag();
+
+        void openOutageReportsFrag();
+
+        void BackFromHomeFragment();
     }
 }

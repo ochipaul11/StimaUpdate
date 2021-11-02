@@ -22,7 +22,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity implements
         LoginFragment.OnLoginFormActivityListener,
         RegistrationFragment.RegisterFormListener,
-        HomeFragment.HomeFragmentListener,
+        DashboardFrag.DashboardFragmentListener,
         OutageReportsFrag.OutageReportsListener, ReportOutageFrag.ReportOutageActivityListener {
 
     public static PrefConfig prefConfig;
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements
         prefConfig.writePhoneNumber(phoneNumber);
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, new HomeFragment())
+                .replace(R.id.fragment_container, new DashboardFrag())
                 .commit();
     }
 
@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, new ReportOutageFrag())
+                .addToBackStack(null)
                 .commit();
     }
 
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, new OutageReportsFrag())
+                .addToBackStack(null)
                 .commit();
     }
 
@@ -212,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements
 
                 geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
                 try {
-                    myAddress = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
+                    myAddress = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

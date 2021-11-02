@@ -11,13 +11,11 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.transferwise.sequencelayout.SequenceStep;
-
 public class HomeFragment extends Fragment {
 
     HomeFragmentListener homeFragmentListener;
     Button btnReportOutage, btnLogOut, btnReportsList;
-    SequenceStep step1, step2, step3, step4, step5;
+
 
     public HomeFragment() {
         // Required empty public constructor
