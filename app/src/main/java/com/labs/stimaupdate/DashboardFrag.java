@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
@@ -58,6 +59,14 @@ public class DashboardFrag extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
+        Toolbar toolbarDashboard = view.findViewById(R.id.tool_bar);
+        toolbarDashboard.setNavigationIcon(R.drawable.ic_account_profile);
+        toolbarDashboard.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dashboardFragmentListener.openMyProfileFrag();
+            }
+        });
         cvMyZone = view.findViewById(R.id.cvMyZone);
         cvReportOutage = view.findViewById(R.id.cvReportOutage);
         cvReportStatus = view.findViewById(R.id.cvReportStatus);
@@ -101,6 +110,8 @@ public class DashboardFrag extends Fragment {
         void LogoutListener();
 
         void openReportOutageFrag();
+
+        void openMyProfileFrag();
 
         void openHeatMap();
 

@@ -1,5 +1,7 @@
 package com.labs.stimaupdate;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +9,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -17,7 +20,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class HeatMapsFragment extends Fragment {
-
+    HeatMapFragLister heatMapFragLister;
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
         /**
@@ -43,6 +46,16 @@ public class HeatMapsFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_heat_map, container, false);
+        Toolbar toolbarHeatMapFrag = view.findViewById(R.id.toolbarHeatMapFrag);
+
+        toolbarHeatMapFrag.setTitle("My Zone");
+        toolbarHeatMapFrag.setNavigationIcon(R.drawable.ic_navigate_before_white_24dp);
+        toolbarHeatMapFrag.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                heatMapFragLister.backFromHeatMapFragToDashboard();
+            }
+        });
         return view;
     }
 
@@ -54,5 +67,16 @@ public class HeatMapsFragment extends Fragment {
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
         }
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        Activity activity = (Activity) context;
+        heatMapFragLister = (HeatMapFragLister) activity;
+    }
+
+    public interface HeatMapFragLister {
+        void backFromHeatMapFragToDashboard();
     }
 }

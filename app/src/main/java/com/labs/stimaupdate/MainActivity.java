@@ -23,7 +23,11 @@ public class MainActivity extends AppCompatActivity implements
         LoginFragment.OnLoginFormActivityListener,
         RegistrationFragment.RegisterFormListener,
         DashboardFrag.DashboardFragmentListener,
-        OutageReportsFrag.OutageReportsListener, ReportOutageFrag.ReportOutageActivityListener {
+        OutageReportsFrag.OutageReportsListener,
+        ReportOutageFrag.ReportOutageActivityListener,
+        HeatMapsFragment.HeatMapFragLister,
+        MyProfileFrag.MyprofileFragListener
+{
 
     public static PrefConfig prefConfig;
     public static ApiInterface apiInterface;
@@ -116,6 +120,15 @@ public class MainActivity extends AppCompatActivity implements
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, new ReportOutageFrag())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void openMyProfileFrag() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container,new MyProfileFrag())
                 .addToBackStack(null)
                 .commit();
     }
@@ -215,6 +228,22 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void backFromReportOutageToDashboard() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new DashboardFrag())
+                .commit();
+    }
+
+    @Override
+    public void backFromHeatMapFragToDashboard() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new DashboardFrag())
+                .commit();
+    }
+
+    @Override
+    public void backFromMyProfileToDashboard() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, new DashboardFrag())
