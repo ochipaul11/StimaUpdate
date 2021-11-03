@@ -1,6 +1,7 @@
 package com.labs.stimaupdate;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +12,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -36,6 +39,8 @@ public class ReportOutageFrag extends Fragment {
     private ArrayAdapter<String> arrayAdapter_complaintNature;
     private TextInputEditText etAccountNumber;
     private Button btnReportComplaint;
+    private ProgressDialog progressDialog;
+  //  private Toolbar toolbarReportOutage;
 
 
     public ReportOutageFrag() {
@@ -47,13 +52,23 @@ public class ReportOutageFrag extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_report_outage, container, false);
+        Toolbar toolbarReportOutage = view.findViewById(R.id.toolbarReportOutageFrag);
 
         etAccountNumber = view.findViewById(R.id.etAccountNumber);
         tilScope = view.findViewById(R.id.tilScope);
         dpComplaintNature = view.findViewById(R.id.dpComplaintNature);
         dpScopes = view.findViewById(R.id.dpScopes);
         btnReportComplaint = view.findViewById(R.id.btnReportComplaint);
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbarReportOutage);
 
+        toolbarReportOutage.setTitle("Report Outage");
+        toolbarReportOutage.setNavigationIcon(R.drawable.ic_navigate_before_white_24dp);
+        toolbarReportOutage.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reportOutageActivityListener.backFromReportOutageToDashboard();
+            }
+        });
         btnReportComplaint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,8 +76,6 @@ public class ReportOutageFrag extends Fragment {
                 reportOutageActivityListener.getLatitudeLogitude();
 
                 reportOutage();
-
-
             }
         });
 
@@ -99,6 +112,7 @@ public class ReportOutageFrag extends Fragment {
     }
 
     private void reportOutage() {
+        progressDialog = ProgressDialog.show(getContext(), "Reporting Outage...", null, true, true);
         reportOutageActivityListener.getLatitudeLogitude();
         accountNumber = Integer.parseInt(etAccountNumber.getText().toString());
         email = MainActivity.prefConfig.readEmail();
@@ -113,6 +127,7 @@ public class ReportOutageFrag extends Fragment {
         call.enqueue(new Callback<Report>() {
             @Override
             public void onResponse(Call<Report> call, Response<Report> response) {
+                progressDialog.dismiss();
                 if (response.body().getResponse().equals("ok")) {
                     MainActivity.prefConfig.displayToast("Outage Reported Successfully!");
                 } else if (response.body().getResponse().equals("account Number does not exist")) {
@@ -122,10 +137,12 @@ public class ReportOutageFrag extends Fragment {
                 } else {
                     MainActivity.prefConfig.displayToast("Did not collect location data!");
                 }
+
             }
 
             @Override
             public void onFailure(Call<Report> call, Throwable t) {
+                progressDialog.dismiss();
                 MainActivity.prefConfig.displayToast(t.getMessage());
             }
         });
@@ -140,6 +157,8 @@ public class ReportOutageFrag extends Fragment {
 
     public interface ReportOutageActivityListener {
         void getLatitudeLogitude();
+
+        void backFromReportOutageToDashboard();
 
     }
 }

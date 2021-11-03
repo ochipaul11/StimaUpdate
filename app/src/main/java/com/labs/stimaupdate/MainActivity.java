@@ -121,6 +121,15 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void openHeatMap() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container,new HeatMapsFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
     public void openOutageReportsFrag() {
         getSupportFragmentManager()
                 .beginTransaction()
@@ -141,7 +150,10 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void backFromOutageReportsFrag() {
-
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new DashboardFrag())
+                .commit();
     }
 
 
@@ -199,6 +211,14 @@ public class MainActivity extends AppCompatActivity implements
         if (network_enable) {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         }
+    }
+
+    @Override
+    public void backFromReportOutageToDashboard() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new DashboardFrag())
+                .commit();
     }
 
 

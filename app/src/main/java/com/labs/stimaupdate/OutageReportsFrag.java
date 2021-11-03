@@ -1,6 +1,7 @@
 package com.labs.stimaupdate;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +12,8 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import java.util.List;
@@ -21,6 +24,7 @@ import retrofit2.Response;
 
 public class OutageReportsFrag extends Fragment {
     ListView lvReportsList;
+    ProgressDialog progressDialog;
     private OutageReportsListener outageReportsListener;
 
     public OutageReportsFrag() {
@@ -32,9 +36,10 @@ public class OutageReportsFrag extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_outage_reports, container, false);
 
-/*        final Toolbar outageReportsToolbar = view.findViewById(R.id.toolbar_outage_reports);
-        outageReportsToolbar.setTitle("Outage Reports");
-        outageReportsToolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        Toolbar outageReportsToolbar = view.findViewById(R.id.toolbarMyReports);
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(outageReportsToolbar);
+        outageReportsToolbar.setTitle("My Outage Reports");
+        outageReportsToolbar.setNavigationIcon(R.drawable.ic_navigate_before_white_24dp);
 
         outageReportsToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,7 +48,7 @@ public class OutageReportsFrag extends Fragment {
             }
         });
 
- */
+
         lvReportsList = view.findViewById(R.id.lvAllReports);
         lvReportsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -75,6 +80,7 @@ public class OutageReportsFrag extends Fragment {
     }
 
     private void outageReportsList() {
+        progressDialog = ProgressDialog.show(getContext(), "Loading Reports...", null, true, true);
         String email = MainActivity.prefConfig.readEmail();
 
         Call<List<ReportStatus>> call = MainActivity.apiInterface.getOutageReports(email);
@@ -82,13 +88,14 @@ public class OutageReportsFrag extends Fragment {
             @Override
             public void onResponse(Call<List<ReportStatus>> call, Response<List<ReportStatus>> response) {
                 MainActivity.reportStatuses = response.body();
-                MainActivity.reportStatusAdapter = new ReportStatusAdapter(getContext(),MainActivity.reportStatuses);
+                MainActivity.reportStatusAdapter = new ReportStatusAdapter(getContext(), MainActivity.reportStatuses);
                 lvReportsList.setAdapter(MainActivity.reportStatusAdapter);
+                progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<List<ReportStatus>> call, Throwable t) {
-
+                progressDialog.dismiss();
             }
         });
     }

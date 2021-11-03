@@ -1,6 +1,7 @@
 package com.labs.stimaupdate;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ public class DashboardFrag extends Fragment {
     CardView cvMyZone, cvReportOutage, cvReportStatus, cvPlannedOutage, cvLogout, cvAbout;
     private String mParam1;
     private String mParam2;
+    private ProgressDialog progressDialog;
 
     public DashboardFrag() {
         // Required empty public constructor
@@ -43,10 +45,12 @@ public class DashboardFrag extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        progressDialog = ProgressDialog.show(getContext(), "Loading...", null, true, true);
     }
 
     @Override
@@ -61,16 +65,25 @@ public class DashboardFrag extends Fragment {
         cvLogout = view.findViewById(R.id.cvLogOut);
         cvAbout = view.findViewById(R.id.cvAbout);
 
+        progressDialog.dismiss();
+
+        cvMyZone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dashboardFragmentListener.openHeatMap();
+            }
+        });
         cvReportOutage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dashboardFragmentListener.openReportOutageFrag();
             }
         });
-        cvReportStatus.findFocus();
+
         cvReportStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                cvReportStatus.animate();
                 dashboardFragmentListener.openOutageReportsFrag();
             }
         });
@@ -88,6 +101,8 @@ public class DashboardFrag extends Fragment {
         void LogoutListener();
 
         void openReportOutageFrag();
+
+        void openHeatMap();
 
         void openOutageReportsFrag();
 
