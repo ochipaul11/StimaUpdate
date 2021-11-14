@@ -1,8 +1,10 @@
 package com.labs.stimaupdate;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+
+import com.backendless.Backendless;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 
 public class DashboardFrag extends Fragment {
 
@@ -51,7 +57,7 @@ public class DashboardFrag extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        progressDialog = ProgressDialog.show(getContext(), "Loading...", null, true, true);
+        //  progressDialog = ProgressDialog.show(getContext(), "Loading...", null, true, true);
     }
 
     @Override
@@ -74,7 +80,7 @@ public class DashboardFrag extends Fragment {
         cvLogout = view.findViewById(R.id.cvLogOut);
         cvAbout = view.findViewById(R.id.cvAbout);
 
-        progressDialog.dismiss();
+        //   progressDialog.dismiss();
 
         cvMyZone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +105,35 @@ public class DashboardFrag extends Fragment {
         cvLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dashboardFragmentListener.LogoutListener();
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                dialog.setMessage("Are you sure you want to logout");
+                dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        progressDialog = ProgressDialog.show(getContext(), "Logging out...", null, true, true);
+                        Backendless.UserService.logout(new AsyncCallback<Void>() {
+                            @Override
+                            public void handleResponse(Void response) {
+                                MainActivity.prefConfig.displayToast("Logged out!");
+                                dashboardFragmentListener.LogoutListener();
+                                progressDialog.dismiss();
+                            }
+
+                            @Override
+                            public void handleFault(BackendlessFault fault) {
+                                MainActivity.prefConfig.displayToast("Error: " + fault.getMessage());
+                                progressDialog.dismiss();
+                            }
+                        });
+                    }
+                });
+                dialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                dialog.show();
             }
         });
 

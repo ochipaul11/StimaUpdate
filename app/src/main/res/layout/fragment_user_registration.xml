@@ -8,7 +8,7 @@
     android:padding="24dp"
     android:paddingTop="16dp"
     android:background="@android:color/white"
-    tools:context=".MainActivity">
+    tools:context=".UserRegistrationFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -20,7 +20,7 @@
             android:orientation="vertical" >
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
                 android:layout_marginTop="100dp"
@@ -42,15 +42,6 @@
                 android:layout_margin="4dp"
                 android:hint="@string/last_name"
                 android:inputType="text"
-                android:maxLines="1" />
-
-            <EditText
-                android:id="@+id/etMeterAccount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:hint="@string/meter_account"
-                android:inputType="number"
                 android:maxLines="1" />
 
             <EditText

@@ -20,6 +20,9 @@ public interface ApiInterface {
     Call<User> performUserLogin(@Query("email") String email,
                                 @Query("password") String password);
 
+    @GET("getcoordinates.php")
+    Call<List<Coordinates>> getCoordinates();
+
     @GET("getoutagereports.php")
     Call<List<ReportStatus>> getOutageReports(@Query("email") String email);
 

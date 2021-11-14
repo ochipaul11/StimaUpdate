@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +17,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import com.backendless.Backendless;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ReportOutageFrag extends Fragment {
 
@@ -40,8 +40,6 @@ public class ReportOutageFrag extends Fragment {
     private TextInputEditText etAccountNumber;
     private Button btnReportComplaint;
     private ProgressDialog progressDialog;
-  //  private Toolbar toolbarReportOutage;
-
 
     public ReportOutageFrag() {
         // Required empty public constructor
@@ -73,7 +71,7 @@ public class ReportOutageFrag extends Fragment {
             @Override
             public void onClick(View view) {
 
-                reportOutageActivityListener.getLatitudeLogitude();
+                reportOutageActivityListener.getLongitudeLatitude();
 
                 reportOutage();
             }
@@ -113,8 +111,8 @@ public class ReportOutageFrag extends Fragment {
 
     private void reportOutage() {
         progressDialog = ProgressDialog.show(getContext(), "Reporting Outage...", null, true, true);
-        reportOutageActivityListener.getLatitudeLogitude();
-        accountNumber = Integer.parseInt(etAccountNumber.getText().toString());
+   /*     reportOutageActivityListener.getLongitudeLatitude();
+        accountNumber = etAccountNumber.getInputType();
         email = MainActivity.prefConfig.readEmail();
         scope = dpScopes.getText().toString();
         nature = dpComplaintNature.getText().toString();
@@ -122,30 +120,82 @@ public class ReportOutageFrag extends Fragment {
         latitude = MainActivity.latitude;
         address = MainActivity.address;
 
+        Report report = new Report();
+        report.setAddress(address);
+        report.setLatitude(latitude);
+        report.setLongitude(longitude);
+        report.setScope(scope);
+        report.setNature(nature);
+        report.setMeteraccountid(accountNumber);
+*/
+        MeterAccount metersAccount = new MeterAccount();
+        metersAccount.setAccountNumber("123456789");
+        metersAccount.setAccountType("Domestic");
+        metersAccount.setCounty("Kiambu");
+        metersAccount.setTown("Ruaka");
 
-        Call<Report> call = MainActivity.apiInterface.reportAnOutage(accountNumber, email, scope, nature, longitude, latitude, address);
-        call.enqueue(new Callback<Report>() {
+        Backendless.Persistence.save(metersAccount, new AsyncCallback<MeterAccount>() {
             @Override
-            public void onResponse(Call<Report> call, Response<Report> response) {
+            public void handleResponse(MeterAccount response) {
+                Log.d("Mainactivity",response.toString());
                 progressDialog.dismiss();
-                if (response.body().getResponse().equals("ok")) {
-                    MainActivity.prefConfig.displayToast("Outage Reported Successfully!");
-                } else if (response.body().getResponse().equals("account Number does not exist")) {
-                    MainActivity.prefConfig.displayToast("Account Number does not exist!");
-                } else if (response.body().getResponse().equals("error from system")) {
-                    MainActivity.prefConfig.displayToast("Error from the system!");
-                } else {
-                    MainActivity.prefConfig.displayToast("Did not collect location data!");
-                }
-
             }
 
             @Override
-            public void onFailure(Call<Report> call, Throwable t) {
+            public void handleFault(BackendlessFault fault) {
+                Log.d("Mainactivity",fault.toString());
                 progressDialog.dismiss();
-                MainActivity.prefConfig.displayToast(t.getMessage());
             }
         });
+
+
+        /*
+        Contact contact = new Contact();
+        contact.setName("Paul");
+        contact.setEmail(email);
+        contact.setNumber("0798124123");
+        contact.setUserEmail("34340jhfhdf@gmail.com");
+
+        Backendless.Persistence.save(contact, new AsyncCallback<Contact>() {
+            @Override
+            public void handleResponse(Contact response) {
+                Log.d("Mainactivity",response.toString());
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Log.d("Mainactivity","Error: "+fault.toString());
+                progressDialog.dismiss();
+            }
+        });
+
+
+         */
+
+        /*
+        Meter meter = new Meter();
+        meter.setMeterNumber(3451909);
+        meter.setTown("Ruaka");
+        meter.setCounty("Kiambu");
+
+        Backendless.Persistence.save(meter, new AsyncCallback<Meter>() {
+            @Override
+            public void handleResponse(Meter response) {
+                Log.d("Mainactivity",response.toString());
+progressDialog.dismiss();
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Log.d("Mainactivity","Error: "+fault.toString());
+                progressDialog.dismiss();
+            }
+        });
+
+
+         */
+
     }
 
     @Override
@@ -156,7 +206,7 @@ public class ReportOutageFrag extends Fragment {
     }
 
     public interface ReportOutageActivityListener {
-        void getLatitudeLogitude();
+        void getLongitudeLatitude();
 
         void backFromReportOutageToDashboard();
 

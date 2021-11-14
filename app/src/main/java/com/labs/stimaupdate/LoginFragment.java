@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +17,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 
 public class LoginFragment extends Fragment {
 
@@ -28,8 +28,9 @@ public class LoginFragment extends Fragment {
     TextView btnRegisterLogin;
     ProgressDialog progressDialog;
     EditText etEmail, etUserPassword;
-    Button btnLogin;
+    Button btnLogin, btnReset;
     OnLoginFormActivityListener onLoginFormActivityListener;
+
 
     public LoginFragment() {
     }
@@ -38,11 +39,20 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+       // progressDialog = ProgressDialog.show(getContext(), "Loading...", null, true, true);
         etEmail = view.findViewById(R.id.etEmailLogin);
         etUserPassword = view.findViewById(R.id.etPasswordLogin);
         btnLogin = view.findViewById(R.id.btnLogin);
 
+        btnReset = view.findViewById(R.id.btnReset);
 
+
+        btnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resetPassword();
+            }
+        });
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,40 +68,57 @@ public class LoginFragment extends Fragment {
                 onLoginFormActivityListener.performRegister();
             }
         });
+
+
         return view;
+    }
+
+    private void resetPassword() {
+        if (etEmail.getText().toString().isEmpty()) {
+            MainActivity.prefConfig.displayToast("Please enter email address in the email field!");
+        } else {
+            String email = etEmail.getText().toString();
+            progressDialog = ProgressDialog.show(getContext(), "Resetting password...", null, true, true);
+            Backendless.UserService.restorePassword(email, new AsyncCallback<Void>() {
+                @Override
+                public void handleResponse(Void response) {
+                    progressDialog.dismiss();
+                    MainActivity.prefConfig.displayToast("Reset instructions sent to email address!");
+                }
+
+                @Override
+                public void handleFault(BackendlessFault fault) {
+                    progressDialog.dismiss();
+                    MainActivity.prefConfig.displayToast("Error: " + fault.getMessage());
+                }
+            });
+        }
     }
 
     private void userLogin() {
         final String email = etEmail.getText().toString();
         final String userPassword = etUserPassword.getText().toString();
 
-        Call<User> call = MainActivity.apiInterface.performUserLogin(email, userPassword);
-        call.enqueue(new Callback<User>() {
+        progressDialog = ProgressDialog.show(getContext(), "Logging in...", null, true, true);
 
-
+        Backendless.UserService.login(email, userPassword, new AsyncCallback<BackendlessUser>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-
-                if (response.body().getResponse().equals("ok")) {
-                    MainActivity.prefConfig.writeLoginStatus(true);
-                    onLoginFormActivityListener.performLogin(
-                            response.body().getFname(),
-                            response.body().getLname(),
-
-                            response.body().getEmail(),
-                            response.body().getPhonenumber());
-                    MainActivity.prefConfig.displayToast(String.valueOf(response.code()));
-                } else if (response.body().getResponse().equals("failed")) {
-                    MainActivity.prefConfig.displayToast("Wrong Email or Password");
-                }
+            public void handleResponse(BackendlessUser response) {
+                String email = response.getEmail();
+                String fname = (String) response.getProperty("fname");
+                String lname = (String) response.getProperty("lname");
+                String phonenumber = (String) response.getProperty("phonenumber");
+                MainActivity.prefConfig.displayToast("Logged in Successfully!");
+                onLoginFormActivityListener.performLogin(fname,lname,email,phonenumber);
+                progressDialog.dismiss();
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Log.d("MainActivity", t.getMessage());
-                MainActivity.prefConfig.displayToast(t.getMessage());
+            public void handleFault(BackendlessFault fault) {
+                progressDialog.dismiss();
+                MainActivity.prefConfig.displayToast("Error: " + fault.getMessage());
             }
-        });
+        },true);
     }
 
     boolean isEmail(EditText text) {
@@ -136,6 +163,6 @@ public class LoginFragment extends Fragment {
     public interface OnLoginFormActivityListener {
         void performRegister();
 
-        void performLogin(String firstName, String lastName, String email, int phoneNumber);
+        void performLogin(String firstName, String lastName, String email, String phoneNumber);
     }
 }

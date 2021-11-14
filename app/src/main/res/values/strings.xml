@@ -23,4 +23,5 @@
     <string name="label">Account Number</string>
     <string name="account_number">Account Number</string>
     <string name="meter_account">Meter Account</string>
+    <string name="reset">Reset</string>
 </resources>

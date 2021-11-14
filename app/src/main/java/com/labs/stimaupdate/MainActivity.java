@@ -1,6 +1,7 @@
 package com.labs.stimaupdate;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -9,10 +10,17 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.local.UserIdStorageFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,28 +29,30 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements
         LoginFragment.OnLoginFormActivityListener,
-        RegistrationFragment.RegisterFormListener,
+        UserRegistrationFragment.RegisterFormListener,
         DashboardFrag.DashboardFragmentListener,
         OutageReportsFrag.OutageReportsListener,
         ReportOutageFrag.ReportOutageActivityListener,
         HeatMapsFragment.HeatMapFragLister,
-        MyProfileFrag.MyprofileFragListener
-{
+        MyProfileFrag.MyprofileFragListener {
 
     public static PrefConfig prefConfig;
     public static ApiInterface apiInterface;
     public static List<ReportStatus> reportStatuses;
+    public static List<Coordinates> coordinates;
     public static ReportStatusAdapter reportStatusAdapter;
     public static double latitude;
     public static double longitude;
     public static String address;
     public LocationManager locationManager;
-    public LocationListener locationListener = new MyLocati0nListener();
+    public static  LinearLayout linearLayout;
     Geocoder geocoder;
+
     List<Address> myAddress;
+    public LocationListener locationListener = new MyLocationListener();
     private boolean gps_enable = false;
     private boolean network_enable = false;
-
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +63,8 @@ public class MainActivity extends AppCompatActivity implements
         apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
+        linearLayout = findViewById(R.id.linearLayoutMainActivity);
+/*
         if (findViewById(R.id.fragment_container) != null) {
             if (savedInstanceState != null) {
             } else if (prefConfig.readingLoginStatus()) {
@@ -69,6 +80,52 @@ public class MainActivity extends AppCompatActivity implements
             }
         }
 
+ */
+        if (findViewById(R.id.fragment_container) != null){
+        progressDialog= ProgressDialog.show(this, "Loading...", null, true, true);
+        Backendless.UserService.isValidLogin(new AsyncCallback<Boolean>() {
+            @Override
+            public void handleResponse(Boolean response) {
+                if (response) {
+                    String userObjectID = UserIdStorageFactory.instance().getStorage().get();
+
+                    Backendless.Data.of(BackendlessUser.class).findById(userObjectID, new AsyncCallback<BackendlessUser>() {
+                        @Override
+                        public void handleResponse(BackendlessUser response) {
+                            progressDialog.dismiss();
+
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.fragment_container, new DashboardFrag())
+                                    .commit();
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault fault) {
+                            MainActivity.prefConfig.displayToast("Error: " + fault.getMessage());
+                            progressDialog.dismiss();
+                        }
+                    });
+                } else {
+                    progressDialog.dismiss();
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .add(R.id.fragment_container, new LoginFragment())
+                            .commit();
+
+                }
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                progressDialog.dismiss();
+                MainActivity.prefConfig.displayToast("Error: " + fault.getMessage());
+               // Backendless.Data.of(o)
+            }
+        });
+
+        }
+
     }
 
 
@@ -76,13 +133,18 @@ public class MainActivity extends AppCompatActivity implements
     public void performRegister() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, new RegistrationFragment())
+                .setCustomAnimations(R.anim.slide_in,  // enter
+                        R.anim.fade_out,  // exit
+                        R.anim.fade_in,   // popEnter
+                        R.anim.slide_out  // popExit
+                )
+                .replace(R.id.fragment_container, new UserRegistrationFragment())
                 .addToBackStack(null)
                 .commit();
     }
 
     @Override
-    public void performLogin(String firstName, String lastName, String email, int phoneNumber) {
+    public void performLogin(String firstName, String lastName, String email, String phoneNumber) {
         prefConfig.writeFirstName(firstName);
         prefConfig.writeLastName(lastName);
         prefConfig.writeEmail(email);
@@ -97,6 +159,11 @@ public class MainActivity extends AppCompatActivity implements
     public void BackToLoginFromRegistrationFrag() {
         getSupportFragmentManager()
                 .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in,  // enter
+                        R.anim.fade_out,  // exit
+                        R.anim.fade_in,   // popEnter
+                        R.anim.slide_out  // popExit
+                )
                 .replace(R.id.fragment_container, new LoginFragment())
                 .commit();
     }
@@ -107,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements
         prefConfig.writeFirstName("user");
         prefConfig.writeLastName("user");
         prefConfig.writeEmail("email");
+        prefConfig.writePhoneNumber("");
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -128,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements
     public void openMyProfileFrag() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container,new MyProfileFrag())
+                .replace(R.id.fragment_container, new MyProfileFrag())
                 .addToBackStack(null)
                 .commit();
     }
@@ -137,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements
     public void openHeatMap() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container,new HeatMapsFragment())
+                .replace(R.id.fragment_container, new HeatMapsFragment())
                 .addToBackStack(null)
                 .commit();
     }
@@ -189,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void getLatitudeLogitude() {
+    public void getLongitudeLatitude() {
         try {
             gps_enable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         } catch (Exception e) {
@@ -230,6 +298,10 @@ public class MainActivity extends AppCompatActivity implements
     public void backFromReportOutageToDashboard() {
         getSupportFragmentManager()
                 .beginTransaction()
+                .setCustomAnimations(R.anim.slide_out,  // enter
+                        // popEnter
+                        R.anim.slide_in  // popExit
+                )
                 .replace(R.id.fragment_container, new DashboardFrag())
                 .commit();
     }
@@ -251,7 +323,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    private class MyLocati0nListener implements LocationListener {
+    private class MyLocationListener implements LocationListener {
 
 
         @Override

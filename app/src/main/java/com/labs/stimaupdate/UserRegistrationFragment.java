@@ -1,6 +1,7 @@
 package com.labs.stimaupdate;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -16,23 +17,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 
-public class RegistrationFragment extends Fragment {
+public class UserRegistrationFragment extends Fragment {
     RegisterFormListener registerFormListener;
+    ProgressDialog progressDialog;
     private EditText fname, lname, email, phonenumber, password;
     private Button btnRegisterUser, btnBackRegister;
 
-    public RegistrationFragment() {
+    public UserRegistrationFragment() {
 
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_registration, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_registration, container, false);
 
         fname = view.findViewById(R.id.etFirstNameRegister);
         lname = view.findViewById(R.id.etLastnameRegister);
@@ -65,7 +68,7 @@ public class RegistrationFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        Activity activity = (Activity)context;
+        Activity activity = (Activity) context;
         registerFormListener = (RegisterFormListener) activity;
     }
 
@@ -73,41 +76,34 @@ public class RegistrationFragment extends Fragment {
         String fName = fname.getText().toString();
         String lName = lname.getText().toString();
         String userEmail = email.getText().toString();
-        int phoneNumber = Integer.parseInt(phonenumber.getText().toString());
+        String phoneNumber = phonenumber.getText().toString();
         String passWord = password.getText().toString();
 
-        Call<User> call = MainActivity.apiInterface.performRegistration(fName, lName, userEmail, phoneNumber, passWord);
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (response.body().getResponse().equals("ok")) {
-                    MainActivity.prefConfig.displayToast("Registration Successful");
-                    fname.setText("");
-                    lname.setText("");
-                    email.setText("");
-                    phonenumber.setText("");
-                    password.setText("");
-                } else if (response.body().getResponse().equals("exists")) {
-                    MainActivity.prefConfig.displayToast("User already exits...");
-                } else if (response.body().getResponse().equals("error")) {
-                    MainActivity.prefConfig.displayToast("Something went wrong.Try again later");
-                    fname.setText("");
-                    lname.setText("");
-                    email.setText("");
-                    phonenumber.setText("");
-                    password.setText("");
-                }
+        BackendlessUser user = new BackendlessUser();
+        user.setEmail(userEmail);
+        user.setPassword(passWord);
+        user.setProperty("fname", fName);
+        user.setProperty("lname", lName);
+        user.setProperty("phonenumber", phoneNumber);
 
+        progressDialog = ProgressDialog.show(getContext(), "Registering User...", null, true, true);
+
+        Backendless.UserService.register(user, new AsyncCallback<BackendlessUser>() {
+            @Override
+            public void handleResponse(BackendlessUser response) {
+                progressDialog.dismiss();
+                registerFormListener.BackToLoginFromRegistrationFrag();
+                MainActivity.prefConfig.displayToast("User Successfully Registered");
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                MainActivity.prefConfig.displayToast(t.getMessage());
+            public void handleFault(BackendlessFault fault) {
+                progressDialog.dismiss();
+                MainActivity.prefConfig.displayToast("Error: " + fault.getMessage());
             }
         });
 
     }
-
 
 
     Boolean checkDataEntered(EditText checkFirstName, EditText checkLastName, EditText checkEmail, EditText checkPassword) {
@@ -156,7 +152,7 @@ public class RegistrationFragment extends Fragment {
         return bolean;
     }
 
-    public  interface RegisterFormListener{
+    public interface RegisterFormListener {
         void BackToLoginFromRegistrationFrag();
     }
 
