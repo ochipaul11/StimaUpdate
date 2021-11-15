@@ -20,12 +20,12 @@ public class PrefConfig {
     public void writeLanguageSettings(String language) {
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(context.getString(R.string.pref_language_setting),language);
+        editor.putString(context.getString(R.string.pref_language_setting), language);
         editor.commit();
     }
 
-    public String readLanguageSettings(){
-        return sharedPreferences.getString(context.getString(R.string.pref_language_setting),"English");
+    public String readLanguageSettings() {
+        return sharedPreferences.getString(context.getString(R.string.pref_language_setting), "English");
     }
 
     public void writeLoginStatus(boolean status) {
@@ -54,10 +54,9 @@ public class PrefConfig {
         editor.commit();
     }
 
-    public void writeMeterAccount(int meteraccount){
+    public void writeCnsumerId(String id) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("com.labs.preference_meter_account",meteraccount);
-        editor.commit();
+        editor.putString(context.getString(R.string.pref_consumer_id), id);
     }
 
     public void writeEmail(String email) {
@@ -66,6 +65,7 @@ public class PrefConfig {
         editor.putString(context.getString(R.string.pref_email), email);
         editor.commit();
     }
+
     public void writePhoneNumber(String phoneNumber) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(context.getString(R.string.pref_last_name), phoneNumber);
@@ -80,16 +80,17 @@ public class PrefConfig {
         return sharedPreferences.getString(context.getString(R.string.pref_last_name), "lastName");
     }
 
-    public int meterAccount(){
-        return  sharedPreferences.getInt("com.labs.preference_meter_account",1);
+    public String readConsumerId() {
+        return sharedPreferences.getString(context.getString(R.string.pref_consumer_id), "consumerId");
     }
+
 
     public String readEmail() {
         return sharedPreferences.getString(context.getString(R.string.pref_email), "email");
     }
 
     public void displayToast(String message) {
-       // Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+        // Toast.makeText(context, message, Toast.LENGTH_LONG).show();
         Snackbar snackbar = Snackbar
                 .make(MainActivity.linearLayout, message, Snackbar.LENGTH_LONG)
                 .setDuration(10000);

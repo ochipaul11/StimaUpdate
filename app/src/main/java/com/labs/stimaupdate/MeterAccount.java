@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class MeterAccount {
     private String accountType;
-    private String accountNumber;
+    private int accountNumber;
     private String town;
     private Date created;
     private Date updated;
@@ -20,11 +20,11 @@ public class MeterAccount {
         this.accountType = accountType;
     }
 
-    public String getAccountNumber() {
+    public int getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(String accountNumber) {
+    public void setAccountNumber(int accountNumber) {
         this.accountNumber = accountNumber;
     }
 

@@ -44,22 +44,23 @@ public class MainActivity extends AppCompatActivity implements
     public static double latitude;
     public static double longitude;
     public static String address;
+    public static LinearLayout linearLayout;
+    public static BackendlessUser backendlessUser;
     public LocationManager locationManager;
-    public static  LinearLayout linearLayout;
+    public LocationListener locationListener;
     Geocoder geocoder;
-
     List<Address> myAddress;
-    public LocationListener locationListener = new MyLocationListener();
+    ProgressDialog progressDialog;
     private boolean gps_enable = false;
     private boolean network_enable = false;
-    ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final String LOG_TAG = MainActivity.class.getSimpleName();
         prefConfig = new PrefConfig(this);
-
+        locationListener = new MyLocationListener();
         apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -81,48 +82,49 @@ public class MainActivity extends AppCompatActivity implements
         }
 
  */
-        if (findViewById(R.id.fragment_container) != null){
-        progressDialog= ProgressDialog.show(this, "Loading...", null, true, true);
-        Backendless.UserService.isValidLogin(new AsyncCallback<Boolean>() {
-            @Override
-            public void handleResponse(Boolean response) {
-                if (response) {
-                    String userObjectID = UserIdStorageFactory.instance().getStorage().get();
+        if (findViewById(R.id.fragment_container) != null) {
+            progressDialog = ProgressDialog.show(this, "Loading...", null, true, true);
+            Backendless.UserService.isValidLogin(new AsyncCallback<Boolean>() {
+                @Override
+                public void handleResponse(Boolean response) {
+                    if (response) {
+                        String userObjectID = UserIdStorageFactory.instance().getStorage().get();
 
-                    Backendless.Data.of(BackendlessUser.class).findById(userObjectID, new AsyncCallback<BackendlessUser>() {
-                        @Override
-                        public void handleResponse(BackendlessUser response) {
-                            progressDialog.dismiss();
+                        Backendless.Data.of(BackendlessUser.class).findById(userObjectID, new AsyncCallback<BackendlessUser>() {
+                            @Override
+                            public void handleResponse(BackendlessUser response) {
+                                backendlessUser = response;
+                                progressDialog.dismiss();
 
-                            getSupportFragmentManager()
-                                    .beginTransaction()
-                                    .replace(R.id.fragment_container, new DashboardFrag())
-                                    .commit();
-                        }
+                                getSupportFragmentManager()
+                                        .beginTransaction()
+                                        .replace(R.id.fragment_container, new DashboardFrag())
+                                        .commit();
+                            }
 
-                        @Override
-                        public void handleFault(BackendlessFault fault) {
-                            MainActivity.prefConfig.displayToast("Error: " + fault.getMessage());
-                            progressDialog.dismiss();
-                        }
-                    });
-                } else {
+                            @Override
+                            public void handleFault(BackendlessFault fault) {
+                                MainActivity.prefConfig.displayToast("Error: " + fault.getMessage());
+                                progressDialog.dismiss();
+                            }
+                        });
+                    } else {
+                        progressDialog.dismiss();
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .add(R.id.fragment_container, new LoginFragment())
+                                .commit();
+
+                    }
+                }
+
+                @Override
+                public void handleFault(BackendlessFault fault) {
                     progressDialog.dismiss();
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .add(R.id.fragment_container, new LoginFragment())
-                            .commit();
+                    MainActivity.prefConfig.displayToast("Error: " + fault.getMessage());
 
                 }
-            }
-
-            @Override
-            public void handleFault(BackendlessFault fault) {
-                progressDialog.dismiss();
-                MainActivity.prefConfig.displayToast("Error: " + fault.getMessage());
-               // Backendless.Data.of(o)
-            }
-        });
+            });
 
         }
 
@@ -144,11 +146,12 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void performLogin(String firstName, String lastName, String email, String phoneNumber) {
+    public void performLogin(String firstName, String lastName, String email, String phoneNumber, String consumerId) {
         prefConfig.writeFirstName(firstName);
         prefConfig.writeLastName(lastName);
         prefConfig.writeEmail(email);
         prefConfig.writePhoneNumber(phoneNumber);
+        prefConfig.writeCnsumerId(consumerId);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, new DashboardFrag())
@@ -175,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements
         prefConfig.writeLastName("user");
         prefConfig.writeEmail("email");
         prefConfig.writePhoneNumber("");
-
+        backendlessUser = null;
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, new LoginFragment())
@@ -284,9 +287,12 @@ public class MainActivity extends AppCompatActivity implements
                 //                                          int[] grantResults)
                 // to handle the case where the user grants the permission. See the documentation
                 // for ActivityCompat#requestPermissions for more details.
+
+
                 return;
             }
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
         }
         if (network_enable) {
@@ -335,11 +341,12 @@ public class MainActivity extends AppCompatActivity implements
 
                 geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
                 try {
-                    myAddress = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                    myAddress = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 5);
+                    //               Log.d("Mainactivity", "Address:              "+myAddress.toString());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                address = myAddress.get(0).getAddressLine(0);
+                address = myAddress.get(2).getAddressLine(0);
             }
         }
 

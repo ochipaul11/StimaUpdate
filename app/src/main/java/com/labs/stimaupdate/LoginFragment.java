@@ -108,8 +108,10 @@ public class LoginFragment extends Fragment {
                 String fname = (String) response.getProperty("fname");
                 String lname = (String) response.getProperty("lname");
                 String phonenumber = (String) response.getProperty("phonenumber");
+                String consumerId = response.getObjectId();
                 MainActivity.prefConfig.displayToast("Logged in Successfully!");
-                onLoginFormActivityListener.performLogin(fname,lname,email,phonenumber);
+                MainActivity.backendlessUser = response;
+                onLoginFormActivityListener.performLogin(fname,lname,email,phonenumber, consumerId);
                 progressDialog.dismiss();
             }
 
@@ -163,6 +165,6 @@ public class LoginFragment extends Fragment {
     public interface OnLoginFormActivityListener {
         void performRegister();
 
-        void performLogin(String firstName, String lastName, String email, String phoneNumber);
+        void performLogin(String firstName, String lastName, String email, String phoneNumber, String consumerId);
     }
 }

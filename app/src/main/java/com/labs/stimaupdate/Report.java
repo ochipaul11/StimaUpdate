@@ -1,11 +1,15 @@
 package com.labs.stimaupdate;
 
 
+import com.backendless.BackendlessUser;
+
+import java.util.Date;
+
 public class Report {
 
     private int id;
-    private int meterAccountId;
-    private int customerId;
+    Date created;
+    Date updated;
     private String scope;
     private String nature;
     private double longitude;
@@ -13,78 +17,73 @@ public class Report {
     private String address;
     private boolean restored;
     private boolean technicianOnSite;
-    private String restoredDate;
+    String objectId;
+    private MeterAccount meterAccountId;
+    private BackendlessUser consumerId;
+    private Date restoredDate;
 
     public int getId() {
         return id;
-    }
-
-    public String getAddress() {
-        return address;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public String getScope() {
-        return scope;
-    }
-
-    public String getNature() {
-        return nature;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public int getMeteraccountid() {
+    public MeterAccount getMeterAccountId() {
         return meterAccountId;
     }
 
-    public void setMeteraccountid(int meteraccountid) {
-        this.meterAccountId = meteraccountid;
+    public void setMeterAccountId(MeterAccount meterAccountId) {
+        this.meterAccountId = meterAccountId;
+    }
+
+    public BackendlessUser getConsumerId() {
+        return consumerId;
+    }
+
+    public void setConsumerId(BackendlessUser consumerId) {
+        this.consumerId = consumerId;
+    }
+
+    public String getScope() {
+        return scope;
     }
 
     public void setScope(String scope) {
         this.scope = scope;
     }
 
+    public String getNature() {
+        return nature;
+    }
+
     public void setNature(String nature) {
         this.nature = nature;
+    }
+
+    public double getLongitude() {
+        return longitude;
     }
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public int getMeterAccountId() {
-        return meterAccountId;
-    }
-
-    public void setMeterAccountId(int meterAccountId) {
-        this.meterAccountId = meterAccountId;
-    }
-
-    public int getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
     }
 
     public boolean isRestored() {
@@ -103,11 +102,35 @@ public class Report {
         this.technicianOnSite = technicianOnSite;
     }
 
-    public String getRestoredDate() {
+    public Date getRestoredDate() {
         return restoredDate;
     }
 
-    public void setRestoredDate(String restoredDate) {
+    public void setRestoredDate(Date restoredDate) {
         this.restoredDate = restoredDate;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
+    }
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 }

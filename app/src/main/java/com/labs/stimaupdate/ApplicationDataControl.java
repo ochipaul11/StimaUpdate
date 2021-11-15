@@ -16,7 +16,8 @@ public class ApplicationDataControl extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Backendless.setUrl(SERVER_URL);
+
         Backendless.initApp(getApplicationContext(), APPLICATION_ID, API_KEY);
+        Backendless.setUrl(SERVER_URL);
     }
 }

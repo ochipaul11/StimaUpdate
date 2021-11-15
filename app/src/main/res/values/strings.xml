@@ -9,6 +9,7 @@
     <string name="pref_first_name" translatable="false">com.labs.preference_first_name</string>
     <string name="pref_last_name" translatable="false">com.labs.preference_last_name</string>
     <string name="pref_email" translatable="false">com.labs.preference_email</string>
+    <string name="pref_consumer_id" translatable="false">com.labs.preference_consumer_id</string>
     <string name="title_activity_maps">Map</string>
 
     <!-- TODO: Remove or change this placeholder text -->
