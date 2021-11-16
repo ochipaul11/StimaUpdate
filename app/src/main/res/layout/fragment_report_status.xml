@@ -7,46 +7,57 @@
     android:orientation="vertical"
     tools:context=".ReportStatusFrag">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_report_outage"
+    <include
+        android:id="@+id/toolbarReportStatus"
+        layout="@layout/toolbar" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:navigationIcon="?attr/homeAsUpIndicator" />
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:ignore="HardcodedText">
 
-    <com.transferwise.sequencelayout.SequenceLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.transferwise.sequencelayout.SequenceStep
-            android:id="@+id/step1"
+        <com.transferwise.sequencelayout.SequenceLayout
+            android:id="@+id/sequenceLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:anchor="30 Nov"
-            app:title="Outage Reported"/>
-        <com.transferwise.sequencelayout.SequenceStep
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:title="Report Received"/>
-        <com.transferwise.sequencelayout.SequenceStep
-            android:id="@+id/step3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:active="true"
-            app:anchor="Today"
-            app:subtitle="Subtitle of this step."
-            app:title="Technician On Site"
-            app:titleTextAppearance="@style/TextAppearance.AppCompat.Title"/>
-        <com.transferwise.sequencelayout.SequenceStep
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:title="Fourth step"/>
-        <com.transferwise.sequencelayout.SequenceStep
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:anchor="2 Dec"
-            app:title="Restored"/>
-    </com.transferwise.sequencelayout.SequenceLayout>
+            android:layout_marginTop="16dp">
+
+            <com.transferwise.sequencelayout.SequenceStep
+                android:id="@+id/step1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:anchor=" "
+                app:title="OUTAGE REPORTED" />
+
+            <com.transferwise.sequencelayout.SequenceStep
+                android:id="@+id/step2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="REPORT RECEIVED" />
+
+            <com.transferwise.sequencelayout.SequenceStep
+                android:id="@+id/step3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:paddingBottom="8dp"
+
+
+                app:title="TECHNICIAN ON SITE"
+                app:titleTextAppearance="@style/TextAppearance.AppCompat.Title" />
+
+            <com.transferwise.sequencelayout.SequenceStep
+                android:id="@+id/step4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:anchor=" "
+                app:title="RESTORED" />
+        </com.transferwise.sequencelayout.SequenceLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

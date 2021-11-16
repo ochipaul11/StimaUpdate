@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,7 +82,13 @@ public class DashboardFrag extends Fragment {
         cvLogout = view.findViewById(R.id.cvLogOut);
         cvAbout = view.findViewById(R.id.cvAbout);
 
-        //   progressDialog.dismiss();
+       cvPlannedOutage.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               startActivity(new Intent(Intent.ACTION_VIEW,
+                       Uri.parse("https://www.kplc.co.ke/category/view/50/planned-power-interruptions/")));
+           }
+       });
 
         cvMyZone.setOnClickListener(new View.OnClickListener() {
             @Override

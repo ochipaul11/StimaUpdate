@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements
     public static PrefConfig prefConfig;
     public static ApiInterface apiInterface;
     public static List<ReportStatus> reportStatuses;
+    public static ReportAdapter reportAdapter;
+    public static List<Report> reports;
     public static List<Coordinates> coordinates;
     public static ReportStatusAdapter reportStatusAdapter;
     public static double latitude;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements
     public static String address;
     public static LinearLayout linearLayout;
     public static BackendlessUser backendlessUser;
+
     public LocationManager locationManager;
     public LocationListener locationListener;
     Geocoder geocoder;
@@ -229,7 +232,11 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void openReportStatusFrag(ReportStatusFrag i) {
-
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, i)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override

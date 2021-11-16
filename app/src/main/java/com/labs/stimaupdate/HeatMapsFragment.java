@@ -4,16 +4,20 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RawRes;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import com.backendless.Backendless;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.DataQueryBuilder;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -24,36 +28,16 @@ import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class HeatMapsFragment extends Fragment {
     HeatMapFragLister heatMapFragLister;
     GoogleMap map;
     double longitude, latitude;
 
-
     private final OnMapReadyCallback callback = new OnMapReadyCallback() {
 
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
         @Override
         public void onMapReady(GoogleMap googleMap) {
       /*      LatLng sydney = new LatLng(-34, 151);
@@ -84,41 +68,25 @@ public class HeatMapsFragment extends Fragment {
         }
     };
 
-
     private void addHeatMap() {
-  /*    List<LatLng> latLngs = null;
 
-        // Get the data: latitude/longitude positions of police stations.
-        try {
-            latLngs = readItems(R.raw.police);
-
-
-        } catch (JSONException e) {
-            Toast.makeText(getContext(), "Problem reading list of locations.", Toast.LENGTH_LONG).show();
-        }
-
-        // Create a heat map tile provider, passing it the latlngs of the police stations.
-        HeatmapTileProvider provider = new HeatmapTileProvider.Builder()
-                .data(latLngs)
-                .build();
-
-        // Add a tile overlay to the map, using the heat map tile provider.
-        TileOverlay overlay = map.addTileOverlay(new TileOverlayOptions().tileProvider(provider));
-
-
-
-   */
         ProgressDialog progressDialog = ProgressDialog.show(getContext(), "Loading...", null, true, true);
 
+        final int PAGESIZE = 100;
+        DataQueryBuilder queryBuilder = DataQueryBuilder.create();
+        queryBuilder.addProperty("latitude");
+        queryBuilder.addProperty("longitude");
+        queryBuilder.addProperty("id");
+        queryBuilder.setPageSize(PAGESIZE);
 
-        Call<List<Coordinates>> call = MainActivity.apiInterface.getCoordinates();
-        call.enqueue(new Callback<List<Coordinates>>() {
+
+        Backendless.Persistence.of(Report.class).find(queryBuilder, new AsyncCallback<List<Report>>() {
+            private final int offset = 0;
             @Override
-            public void onResponse(Call<List<Coordinates>> call, Response<List<Coordinates>> response) {
-                MainActivity.coordinates = response.body();
-                List<LatLng> latitudeLongitude = readLatLng(response.body());
-                String reply = String.valueOf(response.body().get(4).getLatitude());
-                MainActivity.prefConfig.displayToast(reply);
+            public void handleResponse(List<Report> response) {
+              //  int size = response.size();
+                List<LatLng> latitudeLongitude = readLatLng(response);
+
                 // Create a heat map tile provider, passing it the latlngs of the police stations.
                 HeatmapTileProvider provider = new HeatmapTileProvider.Builder()
                         .data(latitudeLongitude)
@@ -130,34 +98,22 @@ public class HeatMapsFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<Coordinates>> call, Throwable t) {
-progressDialog.dismiss();
+            public void handleFault(BackendlessFault fault) {
+                Log.d("ERROR: ", fault.getMessage());
+                progressDialog.dismiss();
             }
         });
 
-
     }
 
-    private List<LatLng> readItems(@RawRes int resource) throws JSONException {
+    List<LatLng> readLatLng(List<Report> reports) {
         List<LatLng> result = new ArrayList<>();
-        InputStream inputStream = getContext().getResources().openRawResource(resource);
-        String json = new Scanner(inputStream).useDelimiter("\\A").next();
-        JSONArray array = new JSONArray(json);
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject object = array.getJSONObject(i);
-            double lat = object.getDouble("lat");
-            double lng = object.getDouble("lng");
+        Log.d("SIZE: ", String.valueOf(reports.size()));
+        for (int i = 0; i < reports.size(); i++) {
+            double lat = reports.get(i).getLatitude();
+            double lng = reports.get(i).getLongitude();
             result.add(new LatLng(lat, lng));
-        }
-        return result;
-    }
-
-    List<LatLng> readLatLng(List<Coordinates> coordinates) {
-        List<LatLng> result = new ArrayList<>();
-        for (int i = 0; i < coordinates.size(); i++) {
-            double lat = coordinates.get(i).getLatitude();
-            double lng = coordinates.get(i).getLongitude();
-            result.add(new LatLng(lat, lng));
+            Log.d("LATLNG: ID", reports.get(i).getId()+" "+lat + " " + lng);
         }
         return result;
     }
@@ -200,6 +156,7 @@ progressDialog.dismiss();
     }
 
     public interface HeatMapFragLister {
+
         void getLongitudeLatitude();
 
         void backFromHeatMapFragToDashboard();

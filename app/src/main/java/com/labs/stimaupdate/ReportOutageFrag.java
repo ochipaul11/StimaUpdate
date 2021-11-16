@@ -3,8 +3,6 @@ package com.labs.stimaupdate;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,7 +29,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReportOutageFrag extends Fragment implements LocationListener {
+public class ReportOutageFrag extends Fragment {
 
     double longitude, latitude;
     String email, scope, nature, address;
@@ -68,11 +66,12 @@ public class ReportOutageFrag extends Fragment implements LocationListener {
         dpComplaintNature = view.findViewById(R.id.dpComplaintNature);
         dpScopes = view.findViewById(R.id.dpScopes);
         btnReportComplaint = view.findViewById(R.id.btnReportComplaint);
-        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbarReportOutage);
 
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbarReportOutage);
         toolbarReportOutage.setTitle("Report Outage");
         toolbarReportOutage.setNavigationIcon(R.drawable.ic_navigate_before_white_24dp);
         toolbarReportOutage.setNavigationOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 reportOutageActivityListener.backFromReportOutageToDashboard();
@@ -162,10 +161,8 @@ public class ReportOutageFrag extends Fragment implements LocationListener {
                     etAccountNumber.setError("Incorrect meter Account number");
                     progressDialog.dismiss();
                 } else {
-
                     meterAccount = response.get(0);
                     consumer = MainActivity.backendlessUser;
-                    //                   progressDialog.dismiss();
 
                     report.setConsumerId(consumer);
                     report.setMeterAccountId(meterAccount);
@@ -193,80 +190,6 @@ public class ReportOutageFrag extends Fragment implements LocationListener {
                 Log.d("MAINACTIVITY", "Error: " + fault.toString());
             }
         });
-        /*
-                Backendless.Data.of(Report.class).find(queryBuilder, new AsyncCallback<List<Report>>() {
-            @Override
-            public void handleResponse(List<Report> response) {
-                MainActivity.prefConfig.displayToast("Outage reported Successfully!");
-                progressDialog.dismiss();
-
-                for (int i = 0; i < response.size(); i++) {
-                    Log.d("MainActivity", "id: " + response.get(i).getId());
-                    Log.d("MainActivity", "meterAccountId: " + response.get(i).getMeterAccountId());
-                    Log.d("MainActivity", "consumerId: " + response.get(i).getConsumerId());
-                    Log.d("MainActivity", "scope: " + response.get(i).getScope());
-                    Log.d("MainActivity", "nature: " + response.get(i).getNature());
-                    Log.d("MainActivity", "longitude: " + response.get(i).getLongitude());
-                    Log.d("MainActivity", "latitude: " + response.get(i).getLatitude());
-                    Log.d("MainActivity", "Address: " + response.get(i).getAddress());
-                    Log.d("MainActivity", "restored: " + response.get(i).isRestored());
-                    Log.d("MainActivity", "technicianOnSite: " + response.get(i).isTechnicianOnSite());
-                    Log.d("MainActivity", "restoredDate: " + response.get(i).getRestoredDate());
-
-                }
-
-            }
-
-            @Override
-            public void handleFault(BackendlessFault fault) {
-                MainActivity.prefConfig.displayToast("Error!");
-                Log.d("Mainactivity", "Error: " + fault.getMessage());
-                progressDialog.dismiss();
-            }
-        });
-
-         */
-/*
-        Backendless.Persistence.save(report, new AsyncCallback<Report>() {
-            @Override
-            public void handleResponse(Report response) {
-                MainActivity.prefConfig.displayToast("Outage reported Successfully!");
-              progressDialog.dismiss();
-            }
-
-            @Override
-            public void handleFault(BackendlessFault fault) {
-                MainActivity.prefConfig.displayToast("Error!");
-                Log.d("Mainactivity", "Error: " + fault.toString());
-                progressDialog.dismiss();
-            }
-        });
-
-
- */
-        /*
-        MeterAccount metersAccount = new MeterAccount();
-        metersAccount.setAccountNumber("123456789");
-        metersAccount.setAccountType("Domestic");
-        metersAccount.setCounty("Kiambu");
-        metersAccount.setTown("Ruaka");
-
-        Backendless.Persistence.save(metersAccount, new AsyncCallback<MeterAccount>() {
-            @Override
-            public void handleResponse(MeterAccount response) {
-                Log.d("Mainactivity",response.toString());
-                progressDialog.dismiss();
-            }
-
-            @Override
-            public void handleFault(BackendlessFault fault) {
-                Log.d("Mainactivity",fault.toString());
-                progressDialog.dismiss();
-            }
-        });
-
-
-         */
     }
 
     @Override
@@ -274,41 +197,6 @@ public class ReportOutageFrag extends Fragment implements LocationListener {
         super.onAttach(context);
         Activity activity = (Activity) context;
         reportOutageActivityListener = (ReportOutageActivityListener) activity;
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-    /*    if (location != null) {
-            locationManager.removeUpdates(locationListener);
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
-
-            geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
-            try {
-                myAddress = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            address = myAddress.get(0).getAddressLine(0);
-
-        }
-
-     */
-    }
-
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-
     }
 
     public interface ReportOutageActivityListener {

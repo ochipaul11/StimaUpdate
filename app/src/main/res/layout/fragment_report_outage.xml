@@ -10,7 +10,6 @@
     <include
         android:id="@+id/toolbarReportOutageFrag"
         layout="@layout/toolbar"
-
         />
 
     <com.google.android.material.textfield.TextInputLayout

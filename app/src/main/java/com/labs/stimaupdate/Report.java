@@ -18,6 +18,7 @@ public class Report {
     private boolean restored;
     private boolean technicianOnSite;
     String objectId;
+    String ownerId;
     private MeterAccount meterAccountId;
     private BackendlessUser consumerId;
     private Date restoredDate;
@@ -30,20 +31,20 @@ public class Report {
         this.id = id;
     }
 
-    public MeterAccount getMeterAccountId() {
-        return meterAccountId;
+    public Date getCreated() {
+        return created;
     }
 
-    public void setMeterAccountId(MeterAccount meterAccountId) {
-        this.meterAccountId = meterAccountId;
+    public void setCreated(Date created) {
+        this.created = created;
     }
 
-    public BackendlessUser getConsumerId() {
-        return consumerId;
+    public Date getUpdated() {
+        return updated;
     }
 
-    public void setConsumerId(BackendlessUser consumerId) {
-        this.consumerId = consumerId;
+    public void setUpdated(Date updated) {
+        this.updated = updated;
     }
 
     public String getScope() {
@@ -102,35 +103,43 @@ public class Report {
         this.technicianOnSite = technicianOnSite;
     }
 
-    public Date getRestoredDate() {
-        return restoredDate;
-    }
-
-    public void setRestoredDate(Date restoredDate) {
-        this.restoredDate = restoredDate;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Date getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(Date updated) {
-        this.updated = updated;
-    }
-
     public String getObjectId() {
         return objectId;
     }
 
     public void setObjectId(String objectId) {
         this.objectId = objectId;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public MeterAccount getMeterAccountId() {
+        return meterAccountId;
+    }
+
+    public void setMeterAccountId(MeterAccount meterAccountId) {
+        this.meterAccountId = meterAccountId;
+    }
+
+    public BackendlessUser getConsumerId() {
+        return consumerId;
+    }
+
+    public void setConsumerId(BackendlessUser consumerId) {
+        this.consumerId = consumerId;
+    }
+
+    public Date getRestoredDate() {
+        return restoredDate;
+    }
+
+    public void setRestoredDate(Date restoredDate) {
+        this.restoredDate = restoredDate;
     }
 }
