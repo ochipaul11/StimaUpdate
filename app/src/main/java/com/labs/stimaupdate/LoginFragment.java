@@ -111,7 +111,7 @@ public class LoginFragment extends Fragment {
                 String consumerId = response.getObjectId();
                 MainActivity.prefConfig.displayToast("Logged in Successfully!");
                 MainActivity.backendlessUser = response;
-                onLoginFormActivityListener.performLogin(fname,lname,email,phonenumber, consumerId);
+                onLoginFormActivityListener.performLogin(fname,lname,email,phonenumber,consumerId);
                 progressDialog.dismiss();
             }
 

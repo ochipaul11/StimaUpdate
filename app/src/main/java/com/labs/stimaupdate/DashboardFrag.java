@@ -59,7 +59,6 @@ public class DashboardFrag extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        //  progressDialog = ProgressDialog.show(getContext(), "Loading...", null, true, true);
     }
 
     @Override
@@ -68,7 +67,8 @@ public class DashboardFrag extends Fragment {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         Toolbar toolbarDashboard = view.findViewById(R.id.tool_bar);
-        toolbarDashboard.setNavigationIcon(R.drawable.ic_account_profile);
+        toolbarDashboard.setNavigationIcon(R.drawable.ic_profile);
+        toolbarDashboard.setTitle("Stima Update");
         toolbarDashboard.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -1,9 +1,9 @@
 package com.labs.stimaupdate;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +23,7 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
+import com.backendless.persistence.Point;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -35,7 +36,6 @@ public class ReportOutageFrag extends Fragment {
     String email, scope, nature, address;
     int accountNumber;
     ReportOutageActivityListener reportOutageActivityListener;
-    LocationManager locationManager;
     private TextInputLayout tilScope;
     private AutoCompleteTextView dpScopes, dpComplaintNature;
     private ArrayList<String> arrayList_scope;
@@ -49,9 +49,9 @@ public class ReportOutageFrag extends Fragment {
     private BackendlessUser consumer;
 
     public ReportOutageFrag() {
-        // Required empty public constructor
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -123,7 +123,6 @@ public class ReportOutageFrag extends Fragment {
         progressDialog = ProgressDialog.show(getContext(), "Reporting Outage...", null, true, true);
         reportOutageActivityListener.getLongitudeLatitude();
 
-
         email = MainActivity.prefConfig.readEmail();
         scope = dpScopes.getText().toString();
         nature = dpComplaintNature.getText().toString();
@@ -136,17 +135,10 @@ public class ReportOutageFrag extends Fragment {
         report.setAddress(address);
         report.setLatitude(latitude);
         report.setLongitude(longitude);
+        report.setLocation(new Point().setLatitude(latitude).setLongitude(longitude));
         report.setScope(scope);
         report.setNature(nature);
 
-
-        // DataQueryBuilder queryBuilder = DataQueryBuilder.create();
-        // queryBuilder.setWhereClause(whereClause);
-
-        // queryBuilder.setGroupBy("name");
-        //  DataQueryBuilder queryBuilder = DataQueryBuilder.create();
-        //List<String> relations = new ArrayList<String>();
-        //relations.add( "meterAccountNumber" );
         accountNumber = Integer.parseInt(etAccountNumber.getText().toString());
 
         String whereClause = "accountNumber = '" + accountNumber + "'";
@@ -163,16 +155,15 @@ public class ReportOutageFrag extends Fragment {
                 } else {
                     meterAccount = response.get(0);
                     consumer = MainActivity.backendlessUser;
-
                     report.setConsumerId(consumer);
                     report.setMeterAccountId(meterAccount);
 
                     Backendless.Data.of(Report.class).deepSave(report, new AsyncCallback<Report>() {
                         @Override
                         public void handleResponse(Report response) {
-                            MainActivity.prefConfig.displayToast("Outage successfully reported!");
+                            String reportNumber = String.valueOf(response.getId());
+                            MainActivity.prefConfig.displayToast("Outage successfully reported: Report number "+reportNumber);
                             progressDialog.dismiss();
-
                         }
 
                         @Override

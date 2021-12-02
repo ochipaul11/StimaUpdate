@@ -2,26 +2,36 @@ package com.labs.stimaupdate;
 
 
 import com.backendless.BackendlessUser;
+import com.backendless.persistence.Point;
 
 import java.util.Date;
 
 public class Report {
 
-    private int id;
     Date created;
     Date updated;
+    private int id;
     private String scope;
     private String nature;
     private double longitude;
     private double latitude;
+    private Point location;
     private String address;
     private boolean restored;
     private boolean technicianOnSite;
-    String objectId;
-    String ownerId;
+    private String objectId;
+    private String ownerId;
     private MeterAccount meterAccountId;
     private BackendlessUser consumerId;
     private Date restoredDate;
+
+    public Point getLocation() {
+        return location;
+    }
+
+    public void setLocation(Point location) {
+        this.location = location;
+    }
 
     public int getId() {
         return id;

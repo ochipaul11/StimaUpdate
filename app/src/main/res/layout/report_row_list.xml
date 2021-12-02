@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/cardview_dark_background"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:cardBackgroundColor="@color/cardColor"
         android:layout_weight="4"
-        app:cardBackgroundColor="@color/cardview_dark_background">
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout"
@@ -24,7 +24,6 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="8dp"
                 android:text="34"
-                android:textAppearance="@android:style/TextAppearance.Material.Widget.EditText"
                 app:layout_constraintStart_toEndOf="@+id/textView5"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,7 +34,6 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:text="Status"
-                android:textAppearance="@android:style/TextAppearance.Material.Widget.EditText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,8 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
-                android:text="Outage Report "
-                android:textAppearance="@android:style/TextAppearance.Material.Widget.EditText"
+                android:text="Outage Report"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,7 +54,6 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:text="Mon Nov 15 10:41:47"
-                android:textAppearance="@android:style/TextAppearance.Material.Widget.EditText"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 

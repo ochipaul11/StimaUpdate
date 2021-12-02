@@ -41,8 +41,7 @@ public class MainActivity extends AppCompatActivity implements
     public static List<ReportStatus> reportStatuses;
     public static ReportAdapter reportAdapter;
     public static List<Report> reports;
-    public static List<Coordinates> coordinates;
-    public static ReportStatusAdapter reportStatusAdapter;
+
     public static double latitude;
     public static double longitude;
     public static String address;
@@ -86,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements
 
  */
         if (findViewById(R.id.fragment_container) != null) {
+            Backendless.
             progressDialog = ProgressDialog.show(this, "Loading...", null, true, true);
             Backendless.UserService.isValidLogin(new AsyncCallback<Boolean>() {
                 @Override
@@ -108,6 +108,10 @@ public class MainActivity extends AppCompatActivity implements
                             @Override
                             public void handleFault(BackendlessFault fault) {
                                 MainActivity.prefConfig.displayToast("Error: " + fault.getMessage());
+                                getSupportFragmentManager()
+                                        .beginTransaction()
+                                        .add(R.id.fragment_container, new LoginFragment())
+                                        .commit();
                                 progressDialog.dismiss();
                             }
                         });
@@ -240,6 +244,15 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void openHistoryOfRestoredFrag() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new HistoryOfRestoredFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
     public void backFromOutageReportsFrag() {
         getSupportFragmentManager()
                 .beginTransaction()
@@ -332,6 +345,33 @@ public class MainActivity extends AppCompatActivity implements
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, new DashboardFrag())
+                .commit();
+    }
+
+    @Override
+    public void updateMyProfile(String firstName, String lastName, String email, String phoneNumber, String consumerId) {
+        prefConfig.writeFirstName(firstName);
+        prefConfig.writeLastName(lastName);
+        prefConfig.writeEmail(email);
+        prefConfig.writePhoneNumber(phoneNumber);
+        prefConfig.writeCnsumerId(consumerId);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new DashboardFrag())
+                .commit();
+    }
+
+    @Override
+    public void resetPassword() {
+        prefConfig.writeLoginStatus(false);
+        prefConfig.writeFirstName("user");
+        prefConfig.writeLastName("user");
+        prefConfig.writeEmail("email");
+        prefConfig.writePhoneNumber("");
+        backendlessUser = null;
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new LoginFragment())
                 .commit();
     }
 

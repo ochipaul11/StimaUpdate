@@ -48,7 +48,7 @@
 
 
                 app:title="TECHNICIAN ON SITE"
-                app:titleTextAppearance="@style/TextAppearance.AppCompat.Title" />
+                 />
 
             <com.transferwise.sequencelayout.SequenceStep
                 android:id="@+id/step4"

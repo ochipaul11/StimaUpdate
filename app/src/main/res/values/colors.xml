@@ -5,4 +5,5 @@
     <color name="colorAccent">#448AFF</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="secondaryText">#757575</color>
+    <color name="cardColor">#eeeeee</color>
 </resources>

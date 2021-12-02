@@ -2,6 +2,7 @@ package com.labs.stimaupdate;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,10 +33,6 @@ public class ReportStatusFrag extends Fragment {
         ((AppCompatActivity) requireActivity()).setSupportActionBar(reportStatusToolbar);
         reportStatusToolbar.setNavigationIcon(R.drawable.ic_navigate_before_white_24dp);
 
-        sequenceLayout = view.findViewById(R.id.sequenceLayout);
-        sequenceLayout.setProgressForegroundColor(R.color.colorAccent);
-        sequenceLayout.setProgressBackgroundColor(R.color.colorAccent);
-
 
         step1 = view.findViewById(R.id.step1);
         step2 = view.findViewById(R.id.step2);
@@ -49,35 +46,34 @@ public class ReportStatusFrag extends Fragment {
         Boolean restored = bundle.getBoolean("restored");
         String createdDate = bundle.getString("created");
         String restoredDate = bundle.getString("restoredDate");
-        //     Log.d("STATUS DATE:   ",createdDate);
+             Log.d("Restored:   ", String.valueOf(restored));
+             Log.d("TechnicianOnSIte", String.valueOf(technicianOnSite));
         reportStatusToolbar.setTitle("Report status: #" + reportNumber);
 
-        if (technicianOnSite & !restored) {
+        if (technicianOnSite) {
             step1.setAnchor(createdDate);
             step2.setAnchor(createdDate);
             step3.setActive(true);
+            step3.setSubtitle("Restoring electricity ");
             step3.setTitleTextAppearance(R.style.Base_TextAppearance_AppCompat_Title);
 
         } else if (restored) {
             step1.setAnchor(createdDate);
             step2.setAnchor(createdDate);
             step4.setActive(true);
+            step4.setSubtitle("Electricity restored, please contact customer care for any other issues ");
             step4.setTitleTextAppearance(R.style.Base_TextAppearance_AppCompat_Title);
+            step4.setAnchorMinWidth(20);
             step4.setAnchor(restoredDate);
-
 
         } else {
             step1.setAnchor(createdDate);
             step2.setAnchor(createdDate);
             step2.setActive(true);
+            step2.setSubtitle("Technicians on the way");
             step2.setTitleTextAppearance(R.style.Base_TextAppearance_AppCompat_Title);
             step2.animate();
         }
-
-        sequenceLayout = view.findViewById(R.id.sequenceLayout);
-        sequenceLayout.setProgressForegroundColor(R.color.colorAccent);
-        sequenceLayout.setProgressBackgroundColor(R.color.colorAccent);
-
 
         return view;
     }
