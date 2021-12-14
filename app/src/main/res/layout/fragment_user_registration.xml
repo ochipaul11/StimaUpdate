@@ -25,7 +25,9 @@
                 android:layout_height="160dp"
                 android:layout_marginTop="100dp"
                 android:layout_marginBottom="50dp"
-                app:srcCompat="@drawable/stimalogo" />
+                app:srcCompat="@drawable/stimalogo"
+                tools:ignore="ImageContrastCheck,ImageContrastCheck" />
+
             <EditText
                 android:id="@+id/etFirstNameRegister"
                 android:layout_width="match_parent"
@@ -33,7 +35,8 @@
                 android:layout_margin="4dp"
                 android:hint="@string/first_name"
                 android:inputType="text"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:minHeight="48dp" />
 
             <EditText
                 android:id="@+id/etLastnameRegister"
@@ -42,7 +45,8 @@
                 android:layout_margin="4dp"
                 android:hint="@string/last_name"
                 android:inputType="text"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:minHeight="48dp" />
 
             <EditText
                 android:id="@+id/etEmailRegister"
@@ -52,7 +56,7 @@
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:autofillHints="" />
+                android:minHeight="48dp" />
 
             <EditText
                 android:id="@+id/etPhoneNumber"
@@ -60,8 +64,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:hint="@string/phone_number"
+
                 android:inputType="phone"
-                android:maxLines="1" />
+                android:maxLines="1"
+               />
 
             <EditText
                 android:id="@+id/etPasswordRegister"
@@ -70,7 +76,8 @@
                 android:layout_margin="4dp"
                 android:hint="@string/password"
                 android:inputType="textPassword"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:minHeight="48dp" />
 
 
             <RelativeLayout

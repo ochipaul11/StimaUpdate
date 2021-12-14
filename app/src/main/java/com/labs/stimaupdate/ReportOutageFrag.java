@@ -169,6 +169,7 @@ public class ReportOutageFrag extends Fragment {
                         @Override
                         public void handleFault(BackendlessFault fault) {
                             Log.d("MAINACTIVITY   ", fault.toString());
+                            MainActivity.prefConfig.displayToast(fault.getMessage());
                             progressDialog.dismiss();
                         }
                     });

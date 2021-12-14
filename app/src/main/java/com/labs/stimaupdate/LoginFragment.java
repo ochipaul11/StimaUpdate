@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,8 +25,7 @@ import com.backendless.exceptions.BackendlessFault;
 
 public class LoginFragment extends Fragment {
 
-
-    TextView btnRegisterLogin;
+    TextView btnRegisterLogin, btnAdminLogin;
     ProgressDialog progressDialog;
     EditText etEmail, etUserPassword;
     Button btnLogin, btnReset;
@@ -39,13 +39,20 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-       // progressDialog = ProgressDialog.show(getContext(), "Loading...", null, true, true);
-        etEmail = view.findViewById(R.id.etEmailLogin);
-        etUserPassword = view.findViewById(R.id.etPasswordLogin);
-        btnLogin = view.findViewById(R.id.btnLogin);
 
-        btnReset = view.findViewById(R.id.btnReset);
+        etEmail = view.findViewById(R.id.etCustomerEmailLogin);
+        etUserPassword = view.findViewById(R.id.etCustomerPasswordLogin);
+        btnLogin = view.findViewById(R.id.btnCustomerLogin);
 
+        btnReset = view.findViewById(R.id.btnCustomerReset);
+        btnAdminLogin = view.findViewById(R.id.btnadminLogin);
+
+        btnAdminLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onLoginFormActivityListener.openFieldAdminLoginFrag();
+            }
+        });
 
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,7 +68,7 @@ public class LoginFragment extends Fragment {
                 }
             }
         });
-        btnRegisterLogin = view.findViewById(R.id.btnRegister);
+        btnRegisterLogin = view.findViewById(R.id.btnCustomerRegister);
         btnRegisterLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,18 +116,22 @@ public class LoginFragment extends Fragment {
                 String lname = (String) response.getProperty("lname");
                 String phonenumber = (String) response.getProperty("phonenumber");
                 String consumerId = response.getObjectId();
+
                 MainActivity.prefConfig.displayToast("Logged in Successfully!");
                 MainActivity.backendlessUser = response;
-                onLoginFormActivityListener.performLogin(fname,lname,email,phonenumber,consumerId);
+                onLoginFormActivityListener.performLogin(fname, lname, email, phonenumber, consumerId);
                 progressDialog.dismiss();
+
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
                 progressDialog.dismiss();
-                MainActivity.prefConfig.displayToast("Error: " + fault.getMessage());
+                MainActivity.prefConfig.displayToast(fault.getMessage());
+                // Toast.makeText(getContext(), "Error: " +fault.getMessage(), Toast.LENGTH_LONG).show();
+                Log.d("MAIN ACTIVITY.............", "logging listener in...................." + fault.getMessage());
             }
-        },true);
+        }, true);
     }
 
     boolean isEmail(EditText text) {
@@ -164,6 +175,8 @@ public class LoginFragment extends Fragment {
 
     public interface OnLoginFormActivityListener {
         void performRegister();
+
+        void openFieldAdminLoginFrag();
 
         void performLogin(String firstName, String lastName, String email, String phoneNumber, String consumerId);
     }

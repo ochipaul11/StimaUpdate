@@ -23,8 +23,7 @@ public class ReportAdapter extends ArrayAdapter<Report> {
 
         View listItemView = convertView;
         if (listItemView == null) {
-            listItemView = LayoutInflater.from(getContext())
-                    .inflate(R.layout.report_row_list, parent, false);
+            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.report_row_list, parent, false);
         }
         Report currentReport = getItem(position);
         TextView tvReportNumber, tvReportDate, tvReportStatus;
@@ -33,8 +32,15 @@ public class ReportAdapter extends ArrayAdapter<Report> {
         tvReportDate = listItemView.findViewById(R.id.tvReportDate);
         tvReportStatus = listItemView.findViewById(R.id.tvStatus);
 
-        tvReportDate.setText((CharSequence) currentReport.getRestoredDate());
-        tvReportStatus.setText(String.valueOf(currentReport.isRestored()));
+        if(currentReport.isRestored()){
+            tvReportStatus.setText("Restored");
+        }
+        else {
+            tvReportStatus.setText("Not Restored");
+        }
+
+        tvReportDate.setText(String.valueOf(currentReport.getCreated()));
+
         tvReportNumber.setText(String.valueOf(currentReport.getId()));
 
         return listItemView;

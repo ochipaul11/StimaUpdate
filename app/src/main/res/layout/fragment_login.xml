@@ -4,16 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:paddingTop="16dp"
     android:background="@android:color/white"
+    android:orientation="vertical"
     tools:context=".LoginFragment">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:ignore="SpeakableTextPresentCheck">
+        android:padding="24dp"
+        android:paddingTop="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,7 +20,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/stimaUpdateLogo"
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
                 android:layout_marginTop="100dp"
@@ -29,24 +28,25 @@
                 app:srcCompat="@drawable/stimalogo" />
 
             <EditText
-                android:id="@+id/etEmailLogin"
+                android:id="@+id/etCustomerEmailLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:autofillHints=""
                 android:hint="@string/email"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:minHeight="48dp" />
 
             <EditText
-                android:id="@+id/etPasswordLogin"
+                android:id="@+id/etCustomerPasswordLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:hint="@string/password"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:minHeight="48dp" />
 
             <Button
-                android:id="@+id/btnLogin"
+                android:id="@+id/btnCustomerLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -54,19 +54,31 @@
                 android:text="@string/login" />
 
             <Button
-                android:id="@+id/btnReset"
+                android:id="@+id/btnCustomerReset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
                 android:text="@string/reset" />
+
             <TextView
-                android:id="@+id/btnRegister"
+                android:id="@+id/btnCustomerRegister"
                 android:layout_width="wrap_content"
                 android:layout_height="63dp"
                 android:layout_gravity="center"
                 android:paddingTop="20dp"
                 android:text="@string/register"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/btnadminLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="63dp"
+                android:layout_gravity="left"
+                android:paddingTop="40dp"
+                android:text="ADMIN"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="18sp"
                 android:textStyle="bold" />

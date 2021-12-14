@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,15 +92,17 @@ public class UserRegistrationFragment extends Fragment {
         Backendless.UserService.register(user, new AsyncCallback<BackendlessUser>() {
             @Override
             public void handleResponse(BackendlessUser response) {
-                progressDialog.dismiss();
+
                 registerFormListener.BackToLoginFromRegistrationFrag();
                 MainActivity.prefConfig.displayToast("User Successfully Registered");
+                progressDialog.dismiss();
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
                 progressDialog.dismiss();
                 MainActivity.prefConfig.displayToast("Error: " + fault.getMessage());
+                Log.d("REGISTRATION-------------",fault.toString());
             }
         });
 

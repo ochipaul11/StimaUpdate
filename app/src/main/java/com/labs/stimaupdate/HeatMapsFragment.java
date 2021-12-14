@@ -43,8 +43,6 @@ public class HeatMapsFragment extends Fragment {
       /*      LatLng sydney = new LatLng(-34, 151);
             googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
-
        */
 
             map = googleMap;
@@ -62,7 +60,7 @@ public class HeatMapsFragment extends Fragment {
             latitude = MainActivity.latitude;
             LatLng myLocation = new LatLng(latitude, longitude);
             googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.style_json));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 12));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
 
             addHeatMap();
         }
@@ -78,7 +76,6 @@ public class HeatMapsFragment extends Fragment {
         queryBuilder.addProperty("longitude");
         queryBuilder.addProperty("id");
         queryBuilder.setPageSize(PAGESIZE);
-
 
         Backendless.Persistence.of(Report.class).find(queryBuilder, new AsyncCallback<List<Report>>() {
             private final int offset = 0;

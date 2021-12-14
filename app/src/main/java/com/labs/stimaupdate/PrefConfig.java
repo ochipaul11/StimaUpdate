@@ -2,7 +2,8 @@ package com.labs.stimaupdate;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
 
 public class PrefConfig {
 
@@ -53,7 +54,7 @@ public class PrefConfig {
         editor.commit();
     }
 
-    public void writeCnsumerId(String id) {
+    public void writeConsumerId(String id) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(context.getString(R.string.pref_consumer_id), id);
     }
@@ -91,13 +92,15 @@ public class PrefConfig {
     }
 
     public void displayToast(String message) {
-         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-       /* Snackbar snackbar = Snackbar
+        // Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+       Snackbar snackbar = Snackbar
                 .make(MainActivity.linearLayout, message, Snackbar.LENGTH_LONG)
                 .setDuration(10000);
         snackbar.show();
 
-        */
+
+
+
     }
 
 

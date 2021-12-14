@@ -25,6 +25,7 @@ public class Report {
     private BackendlessUser consumerId;
     private Date restoredDate;
 
+
     public Point getLocation() {
         return location;
     }
@@ -148,6 +149,8 @@ public class Report {
     public Date getRestoredDate() {
         return restoredDate;
     }
+
+
 
     public void setRestoredDate(Date restoredDate) {
         this.restoredDate = restoredDate;

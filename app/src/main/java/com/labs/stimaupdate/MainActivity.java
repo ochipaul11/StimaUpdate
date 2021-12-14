@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
@@ -23,7 +22,6 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.local.UserIdStorageFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -33,12 +31,12 @@ public class MainActivity extends AppCompatActivity implements
         DashboardFrag.DashboardFragmentListener,
         OutageReportsFrag.OutageReportsListener,
         ReportOutageFrag.ReportOutageActivityListener,
-        HeatMapsFragment.HeatMapFragLister,
+        HeatMapsFragment.HeatMapFragLister, FieldAdminMapsFragment.OnFieldAdminMapsFragListener,
+        FieldAdminLoginFragment.OnFieldAdminLoginListener,
         MyProfileFrag.MyprofileFragListener {
 
     public static PrefConfig prefConfig;
     public static ApiInterface apiInterface;
-    public static List<ReportStatus> reportStatuses;
     public static ReportAdapter reportAdapter;
     public static List<Report> reports;
 
@@ -85,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements
 
  */
         if (findViewById(R.id.fragment_container) != null) {
-            Backendless.
+
             progressDialog = ProgressDialog.show(this, "Loading...", null, true, true);
             Backendless.UserService.isValidLogin(new AsyncCallback<Boolean>() {
                 @Override
@@ -153,16 +151,27 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void openFieldAdminLoginFrag() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new FieldAdminLoginFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
     public void performLogin(String firstName, String lastName, String email, String phoneNumber, String consumerId) {
         prefConfig.writeFirstName(firstName);
         prefConfig.writeLastName(lastName);
         prefConfig.writeEmail(email);
         prefConfig.writePhoneNumber(phoneNumber);
-        prefConfig.writeCnsumerId(consumerId);
+        prefConfig.writeConsumerId(consumerId);
+
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, new DashboardFrag())
+                .add(R.id.fragment_container, new DashboardFrag())
                 .commit();
+
     }
 
     @Override
@@ -194,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void openReportOutageFrag() {
-        checkLocationPermission();
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, new ReportOutageFrag())
@@ -260,25 +269,25 @@ public class MainActivity extends AppCompatActivity implements
                 .commit();
     }
 
+    /*
+        private boolean checkLocationPermission() {
+            int location = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+            int location2 = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
 
-    private boolean checkLocationPermission() {
-        int location = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-        int location2 = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+            List<String> listPermission = new ArrayList<>();
 
-        List<String> listPermission = new ArrayList<>();
-
-        if (location != PackageManager.PERMISSION_GRANTED) {
-            listPermission.add(Manifest.permission.ACCESS_FINE_LOCATION);
+            if (location != PackageManager.PERMISSION_GRANTED) {
+                listPermission.add(Manifest.permission.ACCESS_FINE_LOCATION);
+            }
+            if (location2 != PackageManager.PERMISSION_GRANTED) {
+                listPermission.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+            }
+            if (!listPermission.isEmpty()) {
+                ActivityCompat.requestPermissions(this, listPermission.toArray(new String[listPermission.size()]), 1);
+            }
+            return true;
         }
-        if (location2 != PackageManager.PERMISSION_GRANTED) {
-            listPermission.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-        }
-        if (!listPermission.isEmpty()) {
-            ActivityCompat.requestPermissions(this, listPermission.toArray(new String[listPermission.size()]), 1);
-        }
-        return true;
-    }
-
+     */
     @Override
     public void getLongitudeLatitude() {
         try {
@@ -308,12 +317,10 @@ public class MainActivity extends AppCompatActivity implements
                 // to handle the case where the user grants the permission. See the documentation
                 // for ActivityCompat#requestPermissions for more details.
 
-
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
                 return;
             }
-
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
         }
         if (network_enable) {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
@@ -354,7 +361,7 @@ public class MainActivity extends AppCompatActivity implements
         prefConfig.writeLastName(lastName);
         prefConfig.writeEmail(email);
         prefConfig.writePhoneNumber(phoneNumber);
-        prefConfig.writeCnsumerId(consumerId);
+        prefConfig.writeConsumerId(consumerId);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, new DashboardFrag())
@@ -375,10 +382,29 @@ public class MainActivity extends AppCompatActivity implements
                 .commit();
     }
 
+    @Override
+    public void performFieldAdminLogin(String firstName, String lastName, String email, String phoneNumber, String consumerId) {
+        prefConfig.writeFirstName(firstName);
+        prefConfig.writeLastName(lastName);
+        prefConfig.writeEmail(email);
+        prefConfig.writePhoneNumber(phoneNumber);
+        prefConfig.writeConsumerId(consumerId);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new FieldAdminDashboardFragment())
+                .commit();
+    }
+
+    @Override
+    public void backFromAdminLoginToLoginFrag() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new LoginFragment())
+                .commit();
+    }
 
     private class MyLocationListener implements LocationListener {
-
-
         @Override
         public void onLocationChanged(Location location) {
             if (location != null) {
