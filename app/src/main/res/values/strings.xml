@@ -26,4 +26,9 @@
     <string name="account_number">Account Number</string>
     <string name="meter_account">Meter Account</string>
     <string name="reset">Reset</string>
+
+    <string-array name="lsCourseOfAction">
+        <item>Reporting to site</item>
+        <item>Electricity restored</item>
+    </string-array>
 </resources>

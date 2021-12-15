@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.backendless.Backendless;
@@ -27,6 +29,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FieldAdminMapsFragment extends Fragment {
@@ -34,6 +37,7 @@ public class FieldAdminMapsFragment extends Fragment {
     OnFieldAdminMapsFragListener onFieldAdminMapsFragListener;
     double longitude, latitude;
     GoogleMap map;
+    List<String> courseofActionList;
     ProgressDialog progressDialog;
 
     private final OnMapReadyCallback callback = new OnMapReadyCallback() {
@@ -75,12 +79,39 @@ public class FieldAdminMapsFragment extends Fragment {
                 @Override
                 public boolean onMarkerClick(@NonNull Marker marker) {
 
+                    courseofActionList = new ArrayList<>();
                     String title = marker.getTitle();
                     int customerId = Integer.parseInt(title.substring(title.lastIndexOf("#") + 1));
 
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Update outage report");
+                    builder.setMultiChoiceItems(R.array.lsCourseOfAction, null, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                            String[] checked = getResources().getStringArray(R.array.lsCourseOfAction);
+                            if (b) {
+                                courseofActionList.add(checked[i]);
+
+                            } else courseofActionList.remove(checked[i]);
+                        }
+                    });
+                    builder.setPositiveButton("Save Changes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            String action = "";
+                            Log.d("COURSE OF ACTION**************************8",courseofActionList.toString());
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    builder.create();
                     return false;
                 }
             });
+
         }
     };
 
