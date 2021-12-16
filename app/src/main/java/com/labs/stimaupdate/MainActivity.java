@@ -96,11 +96,24 @@ public class MainActivity extends AppCompatActivity implements
                             public void handleResponse(BackendlessUser response) {
                                 backendlessUser = response;
                                 progressDialog.dismiss();
-
-                                getSupportFragmentManager()
-                                        .beginTransaction()
-                                        .replace(R.id.fragment_container, new DashboardFrag())
-                                        .commit();
+                                if (response.getEmail().equals(prefConfig.readEmail()) && prefConfig.readRole().equals("admin")) {
+                                    getSupportFragmentManager()
+                                            .beginTransaction()
+                                            .add(R.id.fragment_container, new FieldAdminDashboardFragment())
+                                            .commit();
+                                }
+                                else if(response.getEmail().equals(prefConfig.readEmail()) && prefConfig.readRole().equals("customer")){
+                                    getSupportFragmentManager()
+                                            .beginTransaction()
+                                            .add(R.id.fragment_container, new DashboardFrag())
+                                            .commit();
+                                }
+                                else {
+                                    getSupportFragmentManager()
+                                            .beginTransaction()
+                                            .add(R.id.fragment_container, new LoginFragment())
+                                            .commit();
+                                }
                             }
 
                             @Override
@@ -166,6 +179,7 @@ public class MainActivity extends AppCompatActivity implements
         prefConfig.writeEmail(email);
         prefConfig.writePhoneNumber(phoneNumber);
         prefConfig.writeConsumerId(consumerId);
+        prefConfig.writeRole("customer");
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -389,6 +403,7 @@ public class MainActivity extends AppCompatActivity implements
         prefConfig.writeEmail(email);
         prefConfig.writePhoneNumber(phoneNumber);
         prefConfig.writeConsumerId(consumerId);
+        prefConfig.writeRole("admin");
 
         getSupportFragmentManager()
                 .beginTransaction()

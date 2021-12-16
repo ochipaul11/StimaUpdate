@@ -54,6 +54,12 @@ public class PrefConfig {
         editor.commit();
     }
 
+    public void writeRole(String role) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("com.labs.preference_role", role);
+        editor.commit();
+    }
+
     public void writeConsumerId(String id) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(context.getString(R.string.pref_consumer_id), id);
@@ -80,9 +86,14 @@ public class PrefConfig {
         return sharedPreferences.getString(context.getString(R.string.pref_last_name), "lastName");
     }
 
+    public String readRole() {
+        return sharedPreferences.getString("com.labs.preference_role", "role");
+    }
+
     public String readConsumerId() {
         return sharedPreferences.getString(context.getString(R.string.pref_consumer_id), "consumerId");
     }
+
     public String readPhoneNumber() {
         return sharedPreferences.getString(context.getString(R.string.pref_phone_number), "phoneNumber");
     }
@@ -93,12 +104,10 @@ public class PrefConfig {
 
     public void displayToast(String message) {
         // Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-       Snackbar snackbar = Snackbar
+        Snackbar snackbar = Snackbar
                 .make(MainActivity.linearLayout, message, Snackbar.LENGTH_LONG)
                 .setDuration(10000);
         snackbar.show();
-
-
 
 
     }

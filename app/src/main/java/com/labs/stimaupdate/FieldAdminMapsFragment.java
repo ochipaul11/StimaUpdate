@@ -2,6 +2,7 @@ package com.labs.stimaupdate;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,7 +14,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.backendless.Backendless;
@@ -42,15 +42,6 @@ public class FieldAdminMapsFragment extends Fragment {
 
     private final OnMapReadyCallback callback = new OnMapReadyCallback() {
 
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
         @SuppressLint("PotentialBehaviorOverride")
         @Override
         public void onMapReady(GoogleMap googleMap) {
@@ -58,30 +49,20 @@ public class FieldAdminMapsFragment extends Fragment {
             onFieldAdminMapsFragListener.getLongitudeLatitude();
             longitude = MainActivity.longitude;
             latitude = MainActivity.latitude;
-  /*
-            if (longitude == 0) {
-                onFieldAdminMapsFragListener.getLongitudeLatitude();
-                Log.d("FIELDADMINMAPSFRAG Latitude and Longitude***************************", String.valueOf(longitude + " " + latitude));
-            } else {
-                onFieldAdminMapsFragListener.getLongitudeLatitude();
-                Log.d("FIELDADMINMAPSFRAG ELSE Latitude and Longitude***************************", String.valueOf(longitude + " " + latitude));
- }
-
-   */
 
             LatLng myLocation = new LatLng(latitude, longitude);
             map.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.style_json));
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
 
             addPointsOnMap();
-
-            map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            map.setOnInfoWindowLongClickListener(new GoogleMap.OnInfoWindowLongClickListener() {
                 @Override
-                public boolean onMarkerClick(@NonNull Marker marker) {
-
+                public void onInfoWindowLongClick(@NonNull Marker marker) {
+                    Log.d("INFORMATION WINDOW LONG CLICK", "********************************ACTIVE");
                     courseofActionList = new ArrayList<>();
                     String title = marker.getTitle();
-                    int customerId = Integer.parseInt(title.substring(title.lastIndexOf("#") + 1));
+                 // int customerId = Integer.parseInt(title.substring(title.lastIndexOf("#") + 1));
+                    int customerId = Integer.parseInt(title.substring(0,1));
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Update outage report");
@@ -99,7 +80,26 @@ public class FieldAdminMapsFragment extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             String action = "";
-                            Log.d("COURSE OF ACTION**************************8",courseofActionList.toString());
+
+                            if(courseofActionList.size()==1 && courseofActionList.contains("Reporting to site")){
+                                Log.d("IF********************CustomerId: ", String.valueOf(MainActivity.reports.get(customerId).getId()));
+                                MainActivity.reports.get(customerId).setTechnicianOnSite(true);
+                                Log.d("IF******************** CustomerId String: ",String.valueOf(customerId));
+                            }
+                            else if(courseofActionList.size()==1 && courseofActionList.contains("Electricity restored")){
+                                MainActivity.reports.get(customerId).setRestored(true);
+                                MainActivity.reports.get(customerId).setTechnicianOnSite(true);
+                                Log.d("IF ELSE 1********************", String.valueOf(MainActivity.reports.get(customerId).isRestored()));
+                            }
+                            else if(courseofActionList.size()==2 && courseofActionList.contains("Electricity restored") && courseofActionList.contains("Reporting to site")){
+                                MainActivity.reports.get(customerId).setRestored(true);
+                                MainActivity.reports.get(customerId).setTechnicianOnSite(true);
+                                Log.d("IF ELSE 2********************",MainActivity.reports.get(customerId).toString());
+                            }
+                            else{
+                                MainActivity.prefConfig.displayToast("Error while capturing your input");
+                            }
+
                         }
                     }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
@@ -107,11 +107,9 @@ public class FieldAdminMapsFragment extends Fragment {
 
                         }
                     });
-                    builder.create();
-                    return false;
+                    builder.show();
                 }
             });
-
         }
     };
 
@@ -144,14 +142,13 @@ public class FieldAdminMapsFragment extends Fragment {
 
                     Double lat = response.get(i).getLatitude();
                     Double lng = response.get(i).getLongitude();
-                    String customerNumber = String.valueOf(response.get(i).getId());
                     String scope = response.get(i).getScope();
                     String nature = response.get(i).getNature();
                     LatLng name = new LatLng(lat, lng);
 
                     map.addMarker(new MarkerOptions()
                             .position(name)
-                            .title("CUSTOMER #" + response.indexOf(response.get(i)))
+                            .title(response.indexOf(response.get(i))+": CUSTOMER #" + response.get(i).getId())
                             .snippet("Experiencing " + nature + " nature of outage in " + scope));
                     i++;
                 }
