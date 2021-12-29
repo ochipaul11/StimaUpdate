@@ -33,10 +33,11 @@ public class MainActivity extends AppCompatActivity implements
         ReportOutageFrag.ReportOutageActivityListener,
         HeatMapsFragment.HeatMapFragLister, FieldAdminMapsFragment.OnFieldAdminMapsFragListener,
         FieldAdminLoginFragment.OnFieldAdminLoginListener,
+        FieldAdminDashboardFragment.FieldAdminDashboardFragListener,
+        FieldAdminProfileFragment.FieldAdminProfileFragListener,
         MyProfileFrag.MyprofileFragListener {
 
     public static PrefConfig prefConfig;
-    public static ApiInterface apiInterface;
     public static ReportAdapter reportAdapter;
     public static List<Report> reports;
 
@@ -61,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements
         final String LOG_TAG = MainActivity.class.getSimpleName();
         prefConfig = new PrefConfig(this);
         locationListener = new MyLocationListener();
-        apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         linearLayout = findViewById(R.id.linearLayoutMainActivity);
@@ -208,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements
         prefConfig.writeLastName("user");
         prefConfig.writeEmail("email");
         prefConfig.writePhoneNumber("");
+        prefConfig.writeRole("");
         backendlessUser = null;
         getSupportFragmentManager()
                 .beginTransaction()
@@ -416,6 +417,64 @@ public class MainActivity extends AppCompatActivity implements
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, new LoginFragment())
+                .commit();
+    }
+
+    @Override
+    public void performFieldAdminLogout() {
+        prefConfig.writeLoginStatus(false);
+        prefConfig.writeFirstName("user");
+        prefConfig.writeLastName("user");
+        prefConfig.writeEmail("email");
+        prefConfig.writePhoneNumber("");
+        prefConfig.writeRole("");
+        backendlessUser = null;
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new LoginFragment())
+                .commit();
+    }
+
+    @Override
+    public void openFieldAdmnProfileFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new FieldAdminProfileFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void openFieldAdminReports() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new FieldAdminReportsFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void backFromFieldAdminProfileToDashboard() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.slide_out,  // enter
+                        // popEnter
+                        R.anim.slide_in  // popExit
+                )
+                .replace(R.id.fragment_container, new FieldAdminDashboardFragment())
+                .commit();
+    }
+
+    @Override
+    public void updateFieldAdminProfile(String firstName, String lastName, String email, String phoneNumber, String consumerId) {
+        prefConfig.writeFirstName(firstName);
+        prefConfig.writeLastName(lastName);
+        prefConfig.writeEmail(email);
+        prefConfig.writePhoneNumber(phoneNumber);
+        prefConfig.writeConsumerId(consumerId);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new FieldAdminDashboardFragment())
                 .commit();
     }
 

@@ -2,7 +2,6 @@ package com.labs.stimaupdate;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,8 +45,7 @@ public class ReportStatusFrag extends Fragment {
         Boolean restored = bundle.getBoolean("restored");
         String createdDate = bundle.getString("created");
         String restoredDate = bundle.getString("restoredDate");
-             Log.d("Restored:   ", String.valueOf(restored));
-             Log.d("TechnicianOnSIte", String.valueOf(technicianOnSite));
+
         reportStatusToolbar.setTitle("Report status: #" + reportNumber);
 
         if (technicianOnSite) {

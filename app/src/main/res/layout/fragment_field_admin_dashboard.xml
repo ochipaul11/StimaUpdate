@@ -9,10 +9,7 @@
 
     <include
         android:id="@+id/toolbarFieldAdminDashboard"
-        layout="@layout/toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        layout="@layout/toolbar" />
 
     <ScrollView
         android:layout_width="match_parent"

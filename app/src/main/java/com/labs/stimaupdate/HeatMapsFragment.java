@@ -72,10 +72,13 @@ public class HeatMapsFragment extends Fragment {
 
         final int PAGESIZE = 100;
         DataQueryBuilder queryBuilder = DataQueryBuilder.create();
+
+        String whereClause = "restored = false";
         queryBuilder.addProperty("latitude");
         queryBuilder.addProperty("longitude");
         queryBuilder.addProperty("id");
         queryBuilder.setPageSize(PAGESIZE);
+        queryBuilder.setWhereClause(whereClause);
 
         Backendless.Persistence.of(Report.class).find(queryBuilder, new AsyncCallback<List<Report>>() {
             private final int offset = 0;

@@ -13,16 +13,17 @@
         android:layout_height="wrap_content"
         android:src="@mipmap/ic_launcher_round" />
 
-    <TextureView
+    <TextView
+        android:id="@+id/tvNavRole"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
         android:paddingTop="8dp"
-        android:text="Stima Update"
+        android:text="Administrator"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-    <TextureView
+    <TextView
+        android:id="@+id/tvNavEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="info@stimaupdate.com" />
+        android:text="admin@stimaupdat.com"/>
 </LinearLayout>

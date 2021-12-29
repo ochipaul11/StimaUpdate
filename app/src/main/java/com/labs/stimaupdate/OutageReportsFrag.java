@@ -71,7 +71,7 @@ public class OutageReportsFrag extends Fragment {
                 String createdDate;
 
                 if (MainActivity.reports.get(i).getUpdated() != null) {
-                    restoredDate = new SimpleDateFormat("EEE MMM dd").format(MainActivity.reports.get(i).getUpdated());
+                    restoredDate = new SimpleDateFormat("EEE MMM dd").format(MainActivity.reports.get(i).getRestoredDate());
                     createdDate = new SimpleDateFormat("EEE MMM dd").format(MainActivity.reports.get(i).getCreated());
                 } else {
                     createdDate = new SimpleDateFormat("dd-MM-yy").format(MainActivity.reports.get(i).getCreated());

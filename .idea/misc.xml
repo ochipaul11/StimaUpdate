@@ -11,6 +11,8 @@
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/fragment_field_admin_dashboard.xml" value="0.25" />
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/fragment_field_admin_login.xml" value="0.21388888888888888" />
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/fragment_field_admin_maps.xml" value="0.18046875" />
+        <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/fragment_field_admin_profile.xml" value="0.20810810810810812" />
+        <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/fragment_field_admin_reports.xml" value="0.20810810810810812" />
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/fragment_heat_map.xml" value="0.18046875" />
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/fragment_history_of_restored.xml" value="0.18046875" />
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/fragment_home.xml" value="0.18046875" />
@@ -21,12 +23,14 @@
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/fragment_report_status.xml" value="0.2" />
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/fragment_user_registration.xml" value="0.2" />
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/frament_my_profile.xml" value="0.18046875" />
+        <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/nav_header.xml" value="0.25" />
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/report_row_list.xml" value="0.22" />
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/toolbar.xml" value="0.18046875" />
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/toolbardashboard.xml" value="0.18046875" />
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/menu/admin_login_menu.xml" value="0.18046875" />
-        <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/menu/drawer_menu.xml" value="0.18046875" />
-        <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/menu/outage_reports_menu.xml" value="0.18046875" />
+        <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/menu/drawer_menu.xml" value="0.33" />
+        <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/menu/field_admin_dashboard_menu.xml" value="0.22" />
+        <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/menu/outage_reports_menu.xml" value="0.25" />
         <entry key="..\:/Users/USER-PC/Desktop/StimaUpdate/app/src/main/res/layout/report_row_list.xml" value="0.1" />
         <entry key="..\:/Users/USER-PC/Desktop/StimaUpdate/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.195703125" />
       </map>

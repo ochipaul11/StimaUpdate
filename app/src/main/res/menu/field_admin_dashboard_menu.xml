@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <item
+        android:id="@+id/menuGenerateReports"
+        android:icon="@drawable/ic_generate_reports"
+        android:title="Generate Reports"
+        app:showAsAction="never"
+        />
+
+    <item
+        android:id="@+id/menuMyProfile"
+        android:icon="@drawable/ic_account_profile"
+        android:title="My Profile"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menuLogOut"
+        android:icon="@drawable/ic_logout"
+        android:title="LOGOUT"
+        app:showAsAction="never" />
+</menu>

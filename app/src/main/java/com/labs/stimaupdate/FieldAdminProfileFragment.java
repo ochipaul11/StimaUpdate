@@ -23,17 +23,15 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class MyProfileFrag extends Fragment {
-    MyprofileFragListener myprofileFragListener;
+public class FieldAdminProfileFragment extends Fragment {
+    MyProfileFrag.MyprofileFragListener myprofileFragListener;
+    FieldAdminProfileFragListener fieldAdminProfileFragListener;
     TextView tvProfileFirstName, tvProfileLastName, tvProfileEmail, tvProfilePhoneNumber, tvProfilePassword;
     Button btnProfileSaveChanges, btnProfileCancel;
     ProgressDialog progressDialog;
     String password;
 
-    public MyProfileFrag() {
+    public FieldAdminProfileFragment() {
         // Required empty public constructor
     }
 
@@ -42,25 +40,25 @@ public class MyProfileFrag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.frament_my_profile, container, false);
-        Toolbar toolbarMyProfile = view.findViewById(R.id.toolbarMyProfile);
-        toolbarMyProfile.setTitle("My Profile");
+        View view = inflater.inflate(R.layout.fragment_field_admin_profile, container, false);
+        Toolbar toolbarMyProfile = view.findViewById(R.id.toolbarFieldAdminProfile);
+        toolbarMyProfile.setTitle("Admin Profile");
         toolbarMyProfile.setNavigationIcon(R.drawable.ic_navigate_before_white_24dp);
         toolbarMyProfile.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                myprofileFragListener.backFromMyProfileToDashboard();
+               fieldAdminProfileFragListener.backFromFieldAdminProfileToDashboard();
             }
         });
 
-        tvProfileFirstName = view.findViewById(R.id.tvProfileFirstName);
-        tvProfileLastName = view.findViewById(R.id.tvProfileLastName);
-        tvProfileEmail = view.findViewById(R.id.tvProfileEmail);
-        tvProfilePassword = view.findViewById(R.id.tvProfilePassword);
-        tvProfilePhoneNumber = view.findViewById(R.id.tvProfilePhoneNumber);
+        tvProfileFirstName = view.findViewById(R.id.tvFieldAdminProfileFirstName);
+        tvProfileLastName = view.findViewById(R.id.tvFieldAdminProfileLastName);
+        tvProfileEmail = view.findViewById(R.id.tvFieldAdminProfileEmail);
+        tvProfilePassword = view.findViewById(R.id.tvFieldAdminProfilePassword);
+        tvProfilePhoneNumber = view.findViewById(R.id.tvFieldAdminProfilePhoneNumber);
         tvProfileFirstName.setText(MainActivity.prefConfig.readFirstName());
-        btnProfileCancel = view.findViewById(R.id.btnProfileCancel);
-        btnProfileSaveChanges = view.findViewById(R.id.btnProfileSaveChanges);
+        btnProfileCancel = view.findViewById(R.id.btnFieldAdminProfileCancel);
+        btnProfileSaveChanges = view.findViewById(R.id.btnFieldAdminProfileSaveChanges);
 
         tvProfileFirstName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -231,7 +229,7 @@ public class MyProfileFrag extends Fragment {
                                     @Override
                                     public void handleResponse(BackendlessUser response) {
                                         progressDialog.dismiss();
-                                        myprofileFragListener.updateMyProfile(tvProfileFirstName.toString(),tvProfileLastName.toString(),MainActivity.prefConfig.readEmail(),tvProfilePhoneNumber.toString(),response.getObjectId());
+                                        fieldAdminProfileFragListener.updateFieldAdminProfile(tvProfileFirstName.toString(),tvProfileLastName.toString(),MainActivity.prefConfig.readEmail(),tvProfilePhoneNumber.toString(),response.getObjectId());
                                         MainActivity.prefConfig.displayToast("Profile Successfully Updated!");
                                     }
 
@@ -271,14 +269,15 @@ public class MyProfileFrag extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         Activity activity = (Activity) context;
-        myprofileFragListener = (MyprofileFragListener) activity;
+        myprofileFragListener = (MyProfileFrag.MyprofileFragListener) activity;
+        fieldAdminProfileFragListener = (FieldAdminProfileFragListener) activity;
     }
 
-    public interface MyprofileFragListener {
-        void backFromMyProfileToDashboard();
+    public interface FieldAdminProfileFragListener {
+        void backFromFieldAdminProfileToDashboard();
 
-        void updateMyProfile(String firstName, String lastName, String email, String phoneNumber, String consumerId);
+        void updateFieldAdminProfile(String firstName, String lastName, String email, String phoneNumber, String consumerId);
 
-        void resetPassword();
+       // void resetPassword();
     }
 }

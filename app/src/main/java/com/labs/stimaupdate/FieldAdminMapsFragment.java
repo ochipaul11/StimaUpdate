@@ -30,6 +30,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class FieldAdminMapsFragment extends Fragment {
@@ -58,11 +60,13 @@ public class FieldAdminMapsFragment extends Fragment {
             map.setOnInfoWindowLongClickListener(new GoogleMap.OnInfoWindowLongClickListener() {
                 @Override
                 public void onInfoWindowLongClick(@NonNull Marker marker) {
+
                     Log.d("INFORMATION WINDOW LONG CLICK", "********************************ACTIVE");
+
                     courseofActionList = new ArrayList<>();
                     String title = marker.getTitle();
-                 // int customerId = Integer.parseInt(title.substring(title.lastIndexOf("#") + 1));
-                    int customerId = Integer.parseInt(title.substring(0,1));
+                    // int customerId = Integer.parseInt(title.substring(title.lastIndexOf("#") + 1));
+                    int customerId = Integer.parseInt(title.substring(0, 1));
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Update outage report");
@@ -81,22 +85,64 @@ public class FieldAdminMapsFragment extends Fragment {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             String action = "";
 
-                            if(courseofActionList.size()==1 && courseofActionList.contains("Reporting to site")){
+                            if (courseofActionList.size() == 1 && courseofActionList.contains("Reporting to site")) {
                                 Log.d("IF********************CustomerId: ", String.valueOf(MainActivity.reports.get(customerId).getId()));
                                 MainActivity.reports.get(customerId).setTechnicianOnSite(true);
-                                Log.d("IF******************** CustomerId String: ",String.valueOf(customerId));
-                            }
-                            else if(courseofActionList.size()==1 && courseofActionList.contains("Electricity restored")){
+                                Log.d("IF******************** CustomerId String: ", String.valueOf(customerId));
+
+                                Date currentTime = Calendar.getInstance().getTime();
+                                Log.d("Date:************************************", currentTime.toString());
+//restoredDate = new SimpleDateFormat("EEE MMM dd").format(MainActivity.reports.get(i).getRestoredDate());
+
+                                Backendless.Data.of(Report.class).save(MainActivity.reports.get(customerId), new AsyncCallback<Report>() {
+                                    @Override
+                                    public void handleResponse(Report response) {
+                                        MainActivity.prefConfig.displayToast("Report successfully updated");
+                                    }
+
+                                    @Override
+                                    public void handleFault(BackendlessFault fault) {
+                                        MainActivity.prefConfig.displayToast("Error: " + fault.getMessage());
+                                        Log.d("FIELD ADMIN REPORT UPDATE:********************", fault.toString());
+                                    }
+                                });
+                            } else if (courseofActionList.size() == 1 && courseofActionList.contains("Electricity restored")) {
                                 MainActivity.reports.get(customerId).setRestored(true);
                                 MainActivity.reports.get(customerId).setTechnicianOnSite(true);
+                                MainActivity.reports.get(customerId).setRestoredDate(Calendar.getInstance().getTime());
+
+                                Backendless.Data.of(Report.class).save(MainActivity.reports.get(customerId), new AsyncCallback<Report>() {
+                                    @Override
+                                    public void handleResponse(Report response) {
+                                        MainActivity.prefConfig.displayToast("Report successfully updated");
+                                    }
+
+                                    @Override
+                                    public void handleFault(BackendlessFault fault) {
+                                        MainActivity.prefConfig.displayToast("Error: " + fault.getMessage());
+                                        Log.d("FIELD ADMIN REPORT UPDATE:********************", fault.toString());
+                                    }
+                                });
                                 Log.d("IF ELSE 1********************", String.valueOf(MainActivity.reports.get(customerId).isRestored()));
-                            }
-                            else if(courseofActionList.size()==2 && courseofActionList.contains("Electricity restored") && courseofActionList.contains("Reporting to site")){
+                            } else if (courseofActionList.size() == 2 && courseofActionList.contains("Electricity restored") && courseofActionList.contains("Reporting to site")) {
                                 MainActivity.reports.get(customerId).setRestored(true);
                                 MainActivity.reports.get(customerId).setTechnicianOnSite(true);
-                                Log.d("IF ELSE 2********************",MainActivity.reports.get(customerId).toString());
-                            }
-                            else{
+                                MainActivity.reports.get(customerId).setRestoredDate(Calendar.getInstance().getTime());
+                                Log.d("IF ELSE 2********************", MainActivity.reports.get(customerId).toString());
+
+                                Backendless.Data.of(Report.class).save(MainActivity.reports.get(customerId), new AsyncCallback<Report>() {
+                                    @Override
+                                    public void handleResponse(Report response) {
+                                        MainActivity.prefConfig.displayToast("Report successfully updated");
+                                    }
+
+                                    @Override
+                                    public void handleFault(BackendlessFault fault) {
+                                        MainActivity.prefConfig.displayToast("Error: " + fault.getMessage());
+                                        Log.d("FIELD ADMIN REPORT UPDATE:********************", fault.toString());
+                                    }
+                                });
+                            } else {
                                 MainActivity.prefConfig.displayToast("Error while capturing your input");
                             }
 
@@ -148,7 +194,7 @@ public class FieldAdminMapsFragment extends Fragment {
 
                     map.addMarker(new MarkerOptions()
                             .position(name)
-                            .title(response.indexOf(response.get(i))+": CUSTOMER #" + response.get(i).getId())
+                            .title(response.indexOf(response.get(i)) + ": CUSTOMER #" + response.get(i).getId())
                             .snippet("Experiencing " + nature + " nature of outage in " + scope));
                     i++;
                 }
@@ -166,7 +212,6 @@ public class FieldAdminMapsFragment extends Fragment {
             }
         });
     }
-
 
     @Nullable
     @Override

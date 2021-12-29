@@ -27,10 +27,9 @@ public class LoginFragment extends Fragment {
 
     TextView btnRegisterLogin, btnAdminLogin;
     ProgressDialog progressDialog;
-    EditText etEmail, etUserPassword;
+    EditText etEmail, etUserPassword ;
     Button btnLogin, btnReset;
     OnLoginFormActivityListener onLoginFormActivityListener;
-
 
     public LoginFragment() {
     }
