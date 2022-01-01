@@ -22,6 +22,7 @@ import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.DefaultValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class FieldAdminReportsFragment extends Fragment {
     Toolbar toolbarFieldAdminReports;
     FieldAdminReportsFragmentListener fieldAdminReportsFragmentListener;
     PieChart chart;
-    TextView tvBtnFieldAminNatureOfOutage,tvBtnFieldAdminScopeofOutage;
+    TextView tvBtnFieldAminNatureOfOutage, tvBtnFieldAdminScopeofOutage;
     List<Report> reports = new ArrayList<>();
 
     public FieldAdminReportsFragment() {
@@ -75,6 +76,13 @@ public class FieldAdminReportsFragment extends Fragment {
             }
         });
 
+        tvBtnFieldAminNatureOfOutage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fieldAdminReportsFragmentListener.openFieldAdminNatureOfOutage();
+            }
+        });
+
         return view;
     }
 
@@ -113,16 +121,19 @@ public class FieldAdminReportsFragment extends Fragment {
                     pieEntries.add(new PieEntry(figures[i], labels[i]));
                     Log.d("Entry........", String.valueOf(figures[i]));
                 }
-                
+
                 PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
                 pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
                 PieData data = new PieData(pieDataSet);
+                pieDataSet.setValueTextSize(16.0F);
+                pieDataSet.setValueFormatter(new DefaultValueFormatter(0));
 
                 Description description = new Description();
                 description.setText("ACTIVE AND RESTORED CASES");
                 chart.setDescription(description);
                 chart.setData(data);
                 chart.animateXY(2000, 2000);
+                chart.setEntryLabelTextSize(16.0F);
                 chart.invalidate();
 
             }
@@ -137,6 +148,9 @@ public class FieldAdminReportsFragment extends Fragment {
 
     public interface FieldAdminReportsFragmentListener {
         void backToFieldAdminDashboardFromReportsFrag();
+
         void openFieldAdminScopeOfOutage();
+
+        void openFieldAdminNatureOfOutage();
     }
 }

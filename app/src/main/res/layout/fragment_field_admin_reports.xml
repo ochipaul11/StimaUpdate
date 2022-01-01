@@ -20,29 +20,29 @@
             android:orientation="vertical"
             android:padding="20dp">
 
-            <TextView
-                android:id="@+id/tvScopeOfOutage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Scope of Outage"
-                android:textAlignment="center"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvNatureOfOutage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Nature of the Outage"
-                android:textAlignment="center"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/chartNewAndRestoredCases"
                 android:layout_width="match_parent"
                 android:layout_height="564dp"
                 android:layout_margin="10dp" />
+
+            <TextView
+                android:id="@+id/tvNatureOfOutage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nature of the Outage  ->"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvScopeOfOutage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Scope of Outage  ->"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </ScrollView>
