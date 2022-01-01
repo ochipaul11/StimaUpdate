@@ -1,6 +1,8 @@
 package com.labs.stimaupdate;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,7 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.backendless.Backendless;
@@ -21,6 +26,7 @@ import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.DefaultValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
@@ -32,6 +38,9 @@ public class FieldAdminScopeOfOutageFragment extends Fragment {
     private ProgressDialog progressDialog;
     private PieChart chart;
     private Button btnFieldAdminScopeOfOutageGene;
+    private TextView tvScopeOfOutageHouse, tvScopeOfOutageEstate, tvScopeOfOutageFlat, tvScopeOfOutageClub, tvScopeOfOutageHospital;
+    private Toolbar toolbarFieldAdminScopeOfOutage;
+    private FieldAdminScopreOfOutageListener fieldAdminScopreOfOutageListener;
 
     public FieldAdminScopeOfOutageFragment() {
         // Required empty public constructor
@@ -43,8 +52,25 @@ public class FieldAdminScopeOfOutageFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_field_admin_scope_of_outage, container, false);
 
+        toolbarFieldAdminScopeOfOutage = view.findViewById(R.id.toolbarFieldAdminScopeOfOutage);
+        //   ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbarFieldAdminScopeOfOutage);
+        toolbarFieldAdminScopeOfOutage.setTitle("Scope of Outage");
+        toolbarFieldAdminScopeOfOutage.setNavigationIcon(R.drawable.ic_navigate_before_white_24dp);
+        toolbarFieldAdminScopeOfOutage.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fieldAdminScopreOfOutageListener.backToFieldAdminReportsFromScopeOfOutage();
+            }
+        });
+
         dpYears = view.findViewById(R.id.dpYears);
         dpMonths = view.findViewById(R.id.dpMonths);
+
+        tvScopeOfOutageHouse = view.findViewById(R.id.tvnatureOfOutageNoSupply);
+        tvScopeOfOutageEstate = view.findViewById(R.id.tvNatureOfOutageIrregularSupply);
+        tvScopeOfOutageClub = view.findViewById(R.id.tvNatureOfOutageLinesOnGround);
+        tvScopeOfOutageFlat = view.findViewById(R.id.tvNatureOfOutageFire);
+        tvScopeOfOutageHospital = view.findViewById(R.id.tvScopeOfOutageHospital);
 
         chart = view.findViewById(R.id.pcScopeOfOutage);
 
@@ -120,8 +146,16 @@ public class FieldAdminScopeOfOutageFragment extends Fragment {
 
                 }
 
+                int total = hospital + house + flat + estate + club;
+
+                tvScopeOfOutageHouse.setText(String.format("%.1f", (double) house / total * 100.0));
+                tvScopeOfOutageEstate.setText(String.format("%.1f", (double) estate / total * 100.0));
+                tvScopeOfOutageFlat.setText(String.format("%.1f", (double) flat / total * 100.0));
+                tvScopeOfOutageClub.setText(String.format("%.1f", (double) club / total * 100.0));
+                tvScopeOfOutageHospital.setText(String.format("%.1f", (double) hospital / total * 100.0));
+
                 String[] labels = {"House", "Flat", "Estate", "Club", "Hospital"};
-                int[] figures = {house, flat, estate, club, house};
+                int[] figures = {house, flat, estate, club, hospital};
                 progressDialog.dismiss();
                 List<PieEntry> pieEntries = new ArrayList<>();
 
@@ -131,14 +165,18 @@ public class FieldAdminScopeOfOutageFragment extends Fragment {
                 }
                 PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
                 pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+                pieDataSet.setValueTextSize(16.0F);
+                pieDataSet.setValueFormatter(new DefaultValueFormatter(0));
                 PieData data = new PieData(pieDataSet);
 
                 Description description = new Description();
                 description.setText("SCOPE OF OUTAGE");
                 chart.setDescription(description);
                 chart.setData(data);
-                chart.animateXY(2000, 2000);
+                chart.animateXY(1000, 1000);
+                chart.setEntryLabelTextSize(16.0F);
                 chart.invalidate();
+
             }
 
             @Override
@@ -147,5 +185,16 @@ public class FieldAdminScopeOfOutageFragment extends Fragment {
                 MainActivity.prefConfig.displayToast(fault.getMessage());
             }
         });
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        Activity activity = (Activity) context;
+        fieldAdminScopreOfOutageListener = (FieldAdminScopreOfOutageListener) activity;
+    }
+
+    public interface FieldAdminScopreOfOutageListener {
+        void backToFieldAdminReportsFromScopeOfOutage();
     }
 }

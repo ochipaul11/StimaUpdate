@@ -53,6 +53,7 @@ public class OutageReportsFrag extends Fragment {
         Toolbar outageReportsToolbar = view.findViewById(R.id.toolbarMyReports);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(outageReportsToolbar);
         outageReportsToolbar.setTitle("My Outage Reports");
+
         outageReportsToolbar.setNavigationIcon(R.drawable.ic_navigate_before_white_24dp);
 
 
