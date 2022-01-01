@@ -132,7 +132,7 @@ public class OutageReportsFrag extends Fragment {
         progressDialog = ProgressDialog.show(getContext(), "Loading Reports...", null, true, true);
 
         String ownerID = UserIdStorageFactory.instance().getStorage().get();
-        String whereClause = "ownerId = '" + ownerID + "' AND restored = false";
+        String whereClause = "ownerId = '" + ownerID + "' AND restored = FALSE";
 
         DataQueryBuilder queryBuilder = DataQueryBuilder.create();
 

@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements
         FieldAdminLoginFragment.OnFieldAdminLoginListener,
         FieldAdminDashboardFragment.FieldAdminDashboardFragListener,
         FieldAdminProfileFragment.FieldAdminProfileFragListener,
+        FieldAdminReportsFragment.FieldAdminReportsFragmentListener,
         MyProfileFrag.MyprofileFragListener {
 
     public static PrefConfig prefConfig;
@@ -183,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.fragment_container, new DashboardFrag())
+                .replace(R.id.fragment_container, new DashboardFrag())
                 .commit();
 
     }
@@ -475,6 +476,26 @@ public class MainActivity extends AppCompatActivity implements
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, new FieldAdminDashboardFragment())
+                .commit();
+    }
+
+    @Override
+    public void backToFieldAdminDashboardFromReportsFrag() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.slide_out,  // enter
+                        // popEnter
+                        R.anim.slide_in  // popExit
+                )
+                .replace(R.id.fragment_container, new FieldAdminDashboardFragment())
+                .commit();
+    }
+
+    @Override
+    public void openFieldAdminScopeOfOutage() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container,new FieldAdminScopeOfOutageFragment())
                 .commit();
     }
 

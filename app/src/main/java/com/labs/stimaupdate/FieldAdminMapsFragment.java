@@ -123,6 +123,7 @@ public class FieldAdminMapsFragment extends Fragment {
                                         Log.d("FIELD ADMIN REPORT UPDATE:********************", fault.toString());
                                     }
                                 });
+                                addPointsOnMap();
                                 Log.d("IF ELSE 1********************", String.valueOf(MainActivity.reports.get(customerId).isRestored()));
                             } else if (courseofActionList.size() == 2 && courseofActionList.contains("Electricity restored") && courseofActionList.contains("Reporting to site")) {
                                 MainActivity.reports.get(customerId).setRestored(true);
@@ -142,6 +143,7 @@ public class FieldAdminMapsFragment extends Fragment {
                                         Log.d("FIELD ADMIN REPORT UPDATE:********************", fault.toString());
                                     }
                                 });
+                                addPointsOnMap();
                             } else {
                                 MainActivity.prefConfig.displayToast("Error while capturing your input");
                             }
@@ -168,7 +170,7 @@ public class FieldAdminMapsFragment extends Fragment {
 
     private void addPointsOnMap() {
         final int PAGESIZE = 100;
-        String whereClause = "restored = false";
+        String whereClause = "restored = FALSE";
 
         DataQueryBuilder queryBuilder = DataQueryBuilder.create();
         queryBuilder.setPageSize(PAGESIZE);
