@@ -47,6 +47,7 @@ public class ReportOutageFrag extends Fragment {
     private ProgressDialog progressDialog;
     private MeterAccount meterAccount;
     private BackendlessUser consumer;
+    private Boolean result;
 
     public ReportOutageFrag() {
     }
@@ -60,7 +61,7 @@ public class ReportOutageFrag extends Fragment {
         Toolbar toolbarReportOutage = view.findViewById(R.id.toolbarReportOutageFrag);
         reportOutageActivityListener.getLongitudeLatitude();
 
-
+        result = false;
         etAccountNumber = view.findViewById(R.id.etAccountNumber);
         tilScope = view.findViewById(R.id.tilScope);
         dpComplaintNature = view.findViewById(R.id.dpComplaintNature);
@@ -119,7 +120,7 @@ public class ReportOutageFrag extends Fragment {
         return view;
     }
 
-    private void reportOutage() {
+    public void reportOutage() {
         progressDialog = ProgressDialog.show(getContext(), "Reporting Outage...", null, true, true);
         reportOutageActivityListener.getLongitudeLatitude();
 
@@ -129,7 +130,7 @@ public class ReportOutageFrag extends Fragment {
         longitude = MainActivity.longitude;
         latitude = MainActivity.latitude;
         address = MainActivity.address;
-
+        result = false;
         Report report = new Report();
 
         report.setAddress(address);
@@ -162,7 +163,7 @@ public class ReportOutageFrag extends Fragment {
                         @Override
                         public void handleResponse(Report response) {
                             String reportNumber = String.valueOf(response.getId());
-                            MainActivity.prefConfig.displayToast("Outage successfully reported: Report number "+reportNumber);
+                            MainActivity.prefConfig.displayToast("Outage successfully reported: Report number " + reportNumber);
                             progressDialog.dismiss();
                         }
 

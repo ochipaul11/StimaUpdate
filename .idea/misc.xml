@@ -3,8 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/drawable/ic_account_profile.xml" value="0.22162162162162163" />
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/drawable/ic_navigate_before_white_24dp.xml" value="0.195703125" />
+        <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/drawable/ic_new_cases.xml" value="0.22567567567567567" />
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/drawable/ic_profile.xml" value="0.195703125" />
+        <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/drawable/outline_assignment_turned_in_24.xml" value="0.22162162162162163" />
+        <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/drawable/outline_report_off_24.xml" value="0.22162162162162163" />
+        <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/Dashboardtoolbar.xml" value="0.11441441441441441" />
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/activity_main.xml" value="0.18046875" />
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/fragment_blank.xml" value="0.18046875" />
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/fragment_dashboard.xml" value="0.18046875" />
@@ -28,6 +33,7 @@
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/nav_header.xml" value="0.25" />
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/report_row_list.xml" value="0.22" />
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/toolbar.xml" value="0.18046875" />
+        <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/toolbar_dashboard2.xml" value="0.11441441441441441" />
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/layout/toolbardashboard.xml" value="0.18046875" />
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/menu/admin_login_menu.xml" value="0.18046875" />
         <entry key="..\:/Users/USER-PC/Desktop/BBIT/YR4SEM2/IS Project II/StimaUpdate/app/src/main/res/menu/drawer_menu.xml" value="0.33" />

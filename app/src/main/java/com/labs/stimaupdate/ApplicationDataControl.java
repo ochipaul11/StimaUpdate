@@ -6,8 +6,8 @@ import com.backendless.Backendless;
 
 public class ApplicationDataControl extends Application {
 
-    public static final String APPLICATION_ID = "EFC54068-E661-7FD2-FF0B-04B760F24400";
-    public static final String API_KEY = "0960F547-C649-474D-8AFB-A42EB1268642";
+    public static final String APPLICATION_ID = "BAD55F6E-C68F-0201-FFCE-6DA647782F00";
+    public static final String API_KEY = "EC377614-569A-42D3-A8F9-40E881EBC56B";
     public static final String SERVER_URL = "https://eu-api.backendless.com";
 
     @Override

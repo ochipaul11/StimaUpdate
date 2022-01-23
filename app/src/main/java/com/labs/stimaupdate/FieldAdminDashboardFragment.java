@@ -55,7 +55,9 @@ public class FieldAdminDashboardFragment extends Fragment {
 
         toolbarFieldAdminDashboard = view.findViewById(R.id.toolbarFieldAdminDashboard);
         ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbarFieldAdminDashboard);
-        toolbarFieldAdminDashboard.setTitle("STIMA UPDATE");
+        //  toolbarFieldAdminDashboard.setTitle("STIMA UPDATE");
+        TextView fieldAdminDashboardTitle = view.findViewById(R.id.fieldAdminDashboard_toolbar_title);
+        fieldAdminDashboardTitle.setText("Stima Update");
 
         tvNewOutages = view.findViewById(R.id.tvNewOutages);
         tvSolvedCases = view.findViewById(R.id.tvSolvedCases);
@@ -73,7 +75,7 @@ public class FieldAdminDashboardFragment extends Fragment {
             @Override
             public void handleResponse(Integer response) {
                 Log.d("COUNT new outages...................", response.toString());
-                Log.d("DATE STRING..............",afterFormatDate);
+                Log.d("DATE STRING..............", afterFormatDate);
                 tvNewOutages.setText(response.toString());
             }
 

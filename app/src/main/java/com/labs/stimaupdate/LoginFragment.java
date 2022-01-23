@@ -27,7 +27,7 @@ public class LoginFragment extends Fragment {
 
     TextView btnRegisterLogin, btnAdminLogin;
     ProgressDialog progressDialog;
-    EditText etEmail, etUserPassword ;
+    EditText etEmail, etUserPassword;
     Button btnLogin, btnReset;
     OnLoginFormActivityListener onLoginFormActivityListener;
 
@@ -163,6 +163,30 @@ public class LoginFragment extends Fragment {
         }
 
         return dataStatus;
+    }
+
+    Boolean chechDataEntered(String email, String password) {
+        Boolean dataStatus = true;
+
+        if (!isEmail(email)) {
+            dataStatus = false;
+        } else if (!isPassword(password)) {
+            dataStatus = false;
+        }
+        return dataStatus;
+    }
+
+    Boolean isEmail(String email) {
+        return (!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches());
+    }
+
+    Boolean isPassword(String password) {
+        Boolean bolean = true;
+
+        if (password.length() < 8) {
+            bolean = false;
+        }
+        return bolean;
     }
 
     @Override
